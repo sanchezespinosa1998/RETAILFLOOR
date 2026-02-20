@@ -1,0 +1,5034 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retile - Sustainable Modular Flooring</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Kanit:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Nav */
+    .nav {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1060px;
+      height: 56px;
+      padding: 8px 10px 8px 20px;
+      background: rgba(12, 12, 11, 0.65);
+      backdrop-filter: blur(18px) saturate(1.4);
+      -webkit-backdrop-filter: blur(18px) saturate(1.4);
+      border: 1px solid rgba(114, 192, 158, 0.12);
+      border-radius: 16px;
+      box-shadow: 0 4px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+      transition: top 0.4s cubic-bezier(.22,1,.36,1), background 0.3s, box-shadow 0.3s, border-color 0.3s;
+    }
+
+    .nav--scrolled {
+      top: 12px;
+      background: rgba(12, 12, 11, 0.85);
+      border-color: rgba(114, 192, 158, 0.22);
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 60px rgba(114, 192, 158, 0.06);
+    }
+
+    .nav__progress {
+      position: absolute;
+      bottom: 0;
+      left: 16px;
+      right: 16px;
+      height: 2px;
+      border-radius: 1px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .nav__progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #72c09e, #4edba1);
+      border-radius: 1px;
+      transition: width 0.15s linear;
+    }
+
+    .nav__logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+      transition: transform 0.3s cubic-bezier(.22,1,.36,1);
+    }
+
+    .nav__logo:hover {
+      transform: scale(1.04);
+    }
+
+    .nav__logo-img {
+      height: 22px;
+      width: auto;
+      display: block;
+    }
+
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+      position: relative;
+    }
+
+    .nav__link {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      white-space: nowrap;
+      padding: 7px 14px;
+      border-radius: 10px;
+      transition: color 0.25s, background 0.25s, box-shadow 0.25s;
+      position: relative;
+      letter-spacing: 0.2px;
+    }
+
+    .nav__link:hover {
+      color: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .nav__link--active {
+      color: #fff;
+      background: rgba(114, 192, 158, 0.15);
+      box-shadow: 0 0 12px rgba(114, 192, 158, 0.12);
+    }
+
+    .nav__link--active::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16px;
+      height: 2px;
+      background: #72c09e;
+      border-radius: 1px;
+      box-shadow: 0 0 6px rgba(114,192,158,0.5);
+    }
+
+    .nav__cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 20px;
+      background: linear-gradient(135deg, #72c09e, #5ab888);
+      border: none;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #0c0c0b;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s cubic-bezier(.22,1,.36,1), box-shadow 0.25s;
+      box-shadow: 0 2px 12px rgba(114, 192, 158, 0.25);
+      letter-spacing: 0.2px;
+    }
+
+    .nav__cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent 60%);
+      border-radius: inherit;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .nav__cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(114, 192, 158, 0.4);
+    }
+
+    .nav__cta:hover::before {
+      opacity: 1;
+    }
+
+    .nav__cta-arrow {
+      display: inline-block;
+      transition: transform 0.25s;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .nav__cta:hover .nav__cta-arrow {
+      transform: translateX(3px);
+    }
+
+    .nav__hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      position: relative;
+      width: 40px;
+      height: 40px;
+    }
+
+    .nav__hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 2px;
+      transition: transform 0.35s cubic-bezier(.22,1,.36,1), opacity 0.25s;
+      transform-origin: center;
+    }
+
+    .nav__hamburger--open span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .nav__hamburger--open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .nav__hamburger--open span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* Mobile overlay menu */
+    .nav__mobile-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      background: rgba(12, 12, 11, 0.92);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s cubic-bezier(.22,1,.36,1);
+    }
+
+    .nav__mobile-overlay--open {
+      display: flex;
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .nav__mobile-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 28px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      transition: color 0.25s, background 0.25s, transform 0.4s cubic-bezier(.22,1,.36,1), opacity 0.4s;
+      letter-spacing: -0.3px;
+      transform: translateY(20px);
+      opacity: 0;
+    }
+
+    .nav__mobile-overlay--open .nav__mobile-link {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .nav__mobile-overlay--open .nav__mobile-link:nth-child(1) { transition-delay: 0.05s; }
+    .nav__mobile-overlay--open .nav__mobile-link:nth-child(2) { transition-delay: 0.1s; }
+    .nav__mobile-overlay--open .nav__mobile-link:nth-child(3) { transition-delay: 0.15s; }
+    .nav__mobile-overlay--open .nav__mobile-link:nth-child(4) { transition-delay: 0.2s; }
+    .nav__mobile-overlay--open .nav__mobile-link:nth-child(5) { transition-delay: 0.25s; }
+    .nav__mobile-overlay--open .nav__mobile-link:nth-child(6) { transition-delay: 0.3s; }
+    .nav__mobile-overlay--open .nav__mobile-link:nth-child(7) { transition-delay: 0.35s; }
+
+    .nav__mobile-link:hover,
+    .nav__mobile-link--active {
+      color: #fff;
+      background: rgba(114, 192, 158, 0.12);
+    }
+
+    .nav__mobile-cta {
+      margin-top: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 36px;
+      background: linear-gradient(135deg, #72c09e, #5ab888);
+      border-radius: 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #0c0c0b;
+      text-decoration: none;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform 0.4s cubic-bezier(.22,1,.36,1) 0.4s, opacity 0.4s 0.4s;
+    }
+
+    .nav__mobile-overlay--open .nav__mobile-cta {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Hero badges y adornos */
+    .hero__badges {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      border: 1px solid rgba(114, 192, 158, 0.35);
+      background: rgba(114, 192, 158, 0.08);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #72c09e;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .hero__badge-icon {
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .hero__glow {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(114, 192, 158, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero__glow--top {
+      top: -100px;
+      left: -150px;
+    }
+
+    .hero__glow--bottom {
+      bottom: 100px;
+      right: -200px;
+    }
+
+    .hero__bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(114, 192, 158, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(114, 192, 158, 0.07) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+      z-index: 0;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 25%, rgba(0,0,0,0.6) 65%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 25%, rgba(0,0,0,0.6) 65%, transparent 100%);
+    }
+
+    .hero__bg-tile {
+      position: absolute;
+      border: 2px solid rgba(114, 192, 158, 0.14);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero__bg-tile--1 {
+      width: 90px;
+      height: 90px;
+      top: 18%;
+      left: 6%;
+      transform: rotate(12deg);
+    }
+
+    .hero__bg-tile--2 {
+      width: 64px;
+      height: 64px;
+      top: 35%;
+      right: 7%;
+      transform: rotate(-8deg);
+    }
+
+    .hero__bg-tile--3 {
+      width: 110px;
+      height: 110px;
+      bottom: 25%;
+      left: 3%;
+      transform: rotate(25deg);
+      border-color: rgba(114, 192, 158, 0.1);
+    }
+
+    .hero__bg-tile--4 {
+      width: 50px;
+      height: 50px;
+      bottom: 35%;
+      right: 5%;
+      transform: rotate(-18deg);
+    }
+
+    .hero__bg-angle {
+      position: absolute;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero__bg-angle--1 {
+      top: 14%;
+      right: 12%;
+      width: 180px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(114, 192, 158, 0.2), transparent);
+      transform: rotate(-35deg);
+    }
+
+    .hero__bg-angle--2 {
+      bottom: 30%;
+      left: 8%;
+      width: 220px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(114, 192, 158, 0.16), transparent);
+      transform: rotate(20deg);
+    }
+
+    .hero__bg-cross {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero__bg-cross::before,
+    .hero__bg-cross::after {
+      content: '';
+      position: absolute;
+      background: rgba(114, 192, 158, 0.18);
+    }
+
+    .hero__bg-cross::before {
+      width: 22px;
+      height: 2px;
+      top: 50%;
+      left: 0;
+      margin-top: -1px;
+    }
+
+    .hero__bg-cross::after {
+      width: 2px;
+      height: 22px;
+      left: 50%;
+      top: 0;
+      margin-left: -1px;
+    }
+
+    .hero__bg-cross--1 {
+      top: 22%;
+      right: 18%;
+    }
+
+    .hero__bg-cross--2 {
+      top: 60%;
+      left: 12%;
+    }
+
+    .hero__bg-cross--3 {
+      bottom: 18%;
+      right: 15%;
+    }
+
+    .hero__divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .hero__divider::before,
+    .hero__divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(114, 192, 158, 0.3), transparent);
+    }
+
+    .hero__divider-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: rgba(242, 242, 242, 0.4);
+      white-space: nowrap;
+    }
+
+    /* Features entre galería y logos */
+    .hero__features-card {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      max-width: 1100px;
+      padding: 0 32px;
+    }
+
+    .hero__features {
+      display: flex;
+      gap: 0;
+      width: 100%;
+      padding: 0;
+      background: #e2e2e2;
+      border: none;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.2);
+    }
+
+    .hero__feature {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 28px 32px;
+      position: relative;
+    }
+
+    .hero__feature + .hero__feature {
+      border-left: 1px solid rgba(12, 12, 11, 0.08);
+    }
+
+    .hero__feature-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .hero__feature-icon {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(114, 192, 158, 0.12);
+      border: 1px solid rgba(114, 192, 158, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
+    .hero__feature-metric {
+      font-family: 'Kanit', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #72c09e;
+      line-height: 1;
+    }
+
+    .hero__feature-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hero__feature-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: #0c0c0b;
+    }
+
+    .hero__feature-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.55;
+      color: rgba(12, 12, 11, 0.55);
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #060f0b 0%, #0b3f37 100%);
+      padding: 112px 112px 112px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 82px;
+      overflow-x: hidden;
+    }
+
+    /* Container - Texto y botones */
+    .hero__container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 34px 64px 0;
+      max-width: 826px;
+      width: 100%;
+    }
+
+    .hero__column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+      max-width: 768px;
+    }
+
+    .hero__content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      width: 100%;
+    }
+
+    .hero__headline {
+      font-family: 'Kanit', sans-serif;
+      font-size: 60px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.6px;
+      color: #f2f2f2;
+      text-align: center;
+      max-width: 1026px;
+    }
+
+    .hero__subheadline {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #f2f2f2;
+      text-align: center;
+      max-width: 768px;
+    }
+
+    .hero__actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .hero__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.5;
+      text-decoration: none;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .hero__btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .hero__btn--primary {
+      background-color: #72c09e;
+      color: #ffffff;
+      border: 1px solid #72c09e;
+    }
+
+    .hero__btn--secondary {
+      background-color: #f2f2f2;
+      color: #000000;
+      border: 1px solid transparent;
+    }
+
+    /* Carrusel de imágenes - bordes desvanecidos con el fondo */
+    .hero__gallery {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      max-width: 1440px;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 150px, black calc(100% - 150px), transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 150px, black calc(100% - 150px), transparent 100%);
+      -webkit-mask-size: 80% 80%;
+      mask-size: 100% 100%;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+    }
+
+    .hero__gallery-row {
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .hero__gallery-track {
+      display: flex;
+      gap: 16px;
+      width: max-content;
+      height: 278px;
+    }
+
+    .hero__gallery-track--left {
+      animation: scroll-left 30s linear infinite;
+    }
+
+    .hero__gallery-track--right {
+      animation: scroll-right 30s linear infinite;
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    @keyframes scroll-right {
+      0% { transform: translateX(-50%); }
+      100% { transform: translateX(0); }
+    }
+
+    .hero__gallery-item {
+      flex-shrink: 0;
+      width: 340px;
+      height: 278px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #1a4a42 0%, #0d2d28 100%);
+      overflow: hidden;
+    }
+
+    .hero__gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Sección de logos - estática, compacta */
+    .hero__logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      flex-wrap: wrap;
+      padding: 0 64px 8px;
+      opacity: 0.5;
+    }
+
+    .hero__logo {
+      height: 22px;
+      width: auto;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      transition: opacity 0.2s ease;
+    }
+
+    .hero__logo:hover {
+      opacity: 0.7;
+    }
+
+    .hero__logo-placeholder {
+      flex-shrink: 0;
+      height: 56px;
+      width: 140px;
+      background: rgba(242, 242, 242, 0.2);
+      border-radius: 4px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .nav {
+        max-width: calc(100% - 24px);
+        padding: 8px 12px 8px 16px;
+        height: 50px;
+        border-radius: 14px;
+      }
+
+      .nav__links {
+        display: none;
+      }
+
+      .nav__cta {
+        display: none;
+      }
+
+      .nav__hamburger {
+        display: flex;
+      }
+
+      .hero__container {
+        padding: 80px 32px 0;
+      }
+
+      .hero {
+        padding: 80px 0 0;
+        gap: 60px;
+      }
+
+      .hero__gallery {
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 150px, black calc(100% - 150px), transparent 100%);
+        mask-image: linear-gradient(to right, transparent 0%, black 150px, black calc(100% - 150px), transparent 100%);
+      }
+
+      .hero__logos {
+        gap: 20px;
+        padding: 0 32px 8px;
+      }
+
+      .hero__headline {
+        font-size: 42px;
+      }
+
+      .hero__subheadline {
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        padding: 64px 0 0;
+        gap: 48px;
+      }
+
+      .hero__container {
+        padding: 48px 24px 0;
+      }
+
+      .hero__gallery {
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 80px, black calc(100% - 80px), transparent 100%);
+        mask-image: linear-gradient(to right, transparent 0%, black 80px, black calc(100% - 80px), transparent 100%);
+      }
+
+      .hero__logos {
+        gap: 16px;
+        padding: 0 24px 8px;
+      }
+
+      .hero__logo {
+        height: 18px;
+      }
+
+      .hero__headline {
+        font-size: 32px;
+      }
+
+      .hero__subheadline {
+        font-size: 16px;
+      }
+
+      .hero__actions {
+        flex-direction: column;
+      }
+
+      .hero__btn {
+        width: 100%;
+        max-width: 280px;
+      }
+
+      .hero__gallery-item {
+        width: 280px;
+        height: 228px;
+      }
+
+      .hero__features-card {
+        padding: 0 24px;
+      }
+
+      .hero__features {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .hero__feature + .hero__feature {
+        border-left: none;
+        border-top: 1px solid rgba(114, 192, 158, 0.08);
+      }
+
+      .hero__feature {
+        padding: 20px 24px;
+      }
+    }
+
+    /* Hero-to-Benefits Divider */
+    .hero-divider {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      background: #f2f2f2;
+      margin-top: -1px;
+    }
+
+    .hero-divider__wave {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .hero-divider__content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .hero-divider__badge {
+      color: #0c0c0b;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #fff;
+      padding: 12px 28px;
+      border-radius: 100px;
+      box-shadow:
+        0 2px 20px rgba(12, 12, 11, 0.08),
+        0 0 0 1px rgba(12, 12, 11, 0.04);
+    }
+
+    .hero-divider__pulse {
+      position: relative;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #72c09e;
+    }
+
+    .hero-divider__pulse::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid rgba(114, 192, 158, 0.3);
+      animation: divider-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+
+    @keyframes divider-ping {
+      0% { transform: scale(1); opacity: 1; }
+      75%, 100% { transform: scale(2.2); opacity: 0; }
+    }
+
+    .hero-divider__text {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #0c0c0b;
+    }
+
+    .hero-divider__arrow {
+      animation: divider-bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes divider-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(3px); }
+    }
+
+    @media (max-width: 768px) {
+      .hero-divider__badge {
+        padding: 10px 20px;
+        gap: 10px;
+      }
+
+      .hero-divider__text {
+        font-size: 11px;
+      }
+    }
+
+    .hero-divider--dark {
+      background: #0c0c0b;
+    }
+
+    .hero-divider--dark .hero-divider__badge {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(114, 192, 158, 0.15);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.3), 0 0 40px rgba(114,192,158,0.06);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-divider--dark .hero-divider__text {
+      color: #0c0c0b;
+    }
+
+    /* Benefits Section */
+    .benefits {
+      position: relative;
+      background: #f2f2f2;
+      padding: 120px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 64px;
+      overflow: hidden;
+    }
+
+    .benefits__deco-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(12, 12, 11, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(12, 12, 11, 0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+      mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+    }
+
+    .benefits__header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+      max-width: 760px;
+    }
+
+    .benefits__label {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #72c09e;
+      background: rgba(114, 192, 158, 0.1);
+      border: 1px solid rgba(114, 192, 158, 0.25);
+      padding: 6px 16px;
+      border-radius: 100px;
+    }
+
+    .benefits__title {
+      font-family: 'Kanit', sans-serif;
+      font-size: 44px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.4px;
+      color: #0c0c0b;
+    }
+
+    .benefits__subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    /* Featured benefit - hero card */
+    .benefits__featured {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      width: 100%;
+      max-width: 1100px;
+      background: #0c0c0b;
+      border-radius: 20px;
+      overflow: hidden;
+      min-height: 340px;
+    }
+
+    .benefits__featured-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+      padding: 48px;
+    }
+
+    .benefits__featured-tag {
+      display: inline-block;
+      width: fit-content;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #0c0c0b;
+      background: #72c09e;
+      padding: 4px 12px;
+      border-radius: 4px;
+    }
+
+    .benefits__featured-title {
+      font-family: 'Kanit', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #f2f2f2;
+    }
+
+    .benefits__featured-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.7;
+      color: rgba(242, 242, 242, 0.55);
+    }
+
+    .benefits__featured-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 8px;
+    }
+
+    .benefits__featured-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .benefits__featured-stat-value {
+      font-family: 'Kanit', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1;
+      color: #72c09e;
+    }
+
+    .benefits__featured-stat-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(242, 242, 242, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .benefits__featured-visual {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .benefits__featured-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .benefits__featured-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, #0c0c0b 0%, transparent 30%);
+      pointer-events: none;
+    }
+
+    /* Card grid */
+    .benefits__grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    .benefits__card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 32px 28px;
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid rgba(12, 12, 11, 0.06);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      overflow: hidden;
+    }
+
+    .benefits__card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #72c09e, rgba(114, 192, 158, 0.2));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .benefits__card:hover::before {
+      opacity: 1;
+    }
+
+    .benefits__card:hover {
+      box-shadow: 0 12px 40px rgba(12, 12, 11, 0.08);
+      transform: translateY(-3px);
+    }
+
+    .benefits__card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .benefits__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(114, 192, 158, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .benefits__card-metric {
+      font-family: 'Kanit', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #72c09e;
+      line-height: 1;
+    }
+
+    .benefits__card-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.3;
+      color: #0c0c0b;
+    }
+
+    .benefits__card-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.65;
+      color: #666;
+    }
+
+    /* Comparison bar */
+    .benefits__compare {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1100px;
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid rgba(12, 12, 11, 0.06);
+      padding: 40px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .benefits__compare-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #999;
+      text-align: center;
+    }
+
+    .benefits__compare-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .benefits__compare-row {
+      display: grid;
+      grid-template-columns: 140px 1fr 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .benefits__compare-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0c0c0b;
+    }
+
+    .benefits__compare-bar {
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .benefits__compare-bar--old {
+      background: rgba(12, 12, 11, 0.06);
+      color: #999;
+    }
+
+    .benefits__compare-bar--new {
+      background: linear-gradient(90deg, rgba(114, 192, 158, 0.15), rgba(114, 192, 158, 0.08));
+      color: #72c09e;
+    }
+
+    /* CTA */
+    .benefits__cta {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      padding-top: 8px;
+    }
+
+    .benefits__cta-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      color: #333;
+    }
+
+    .benefits__cta-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .benefits__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .benefits__btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .benefits__btn--primary {
+      background: #0c0c0b;
+      color: #ffffff;
+    }
+
+    .benefits__btn--secondary {
+      background: #ffffff;
+      color: #0c0c0b;
+      border: 1px solid rgba(12, 12, 11, 0.15);
+    }
+
+    @media (max-width: 1024px) {
+      .benefits {
+        padding: 80px 32px;
+      }
+
+      .benefits__title {
+        font-size: 36px;
+      }
+
+      .benefits__featured {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .benefits__featured-visual {
+        height: 240px;
+        order: -1;
+      }
+
+      .benefits__featured-visual::after {
+        background: linear-gradient(to top, #0c0c0b 0%, transparent 50%);
+      }
+
+      .benefits__featured-content {
+        padding: 32px;
+      }
+
+      .benefits__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .benefits__compare-row {
+        grid-template-columns: 100px 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .benefits {
+        padding: 64px 24px;
+        gap: 48px;
+      }
+
+      .benefits__title {
+        font-size: 28px;
+      }
+
+      .benefits__featured-content {
+        padding: 24px;
+      }
+
+      .benefits__featured-title {
+        font-size: 24px;
+      }
+
+      .benefits__featured-stats {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .benefits__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .benefits__card {
+        padding: 24px;
+      }
+
+      .benefits__compare {
+        padding: 24px;
+      }
+
+      .benefits__compare-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .benefits__compare-label {
+        font-size: 13px;
+      }
+
+      .benefits__cta-buttons {
+        flex-direction: column;
+      }
+
+      .benefits__btn {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+
+    /* Video Section */
+    .video-section {
+      position: relative;
+      background: #0c0c0b;
+      padding: 120px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 56px;
+      overflow: hidden;
+    }
+
+    /* Full-cover tile blueprint background */
+    .video-section__blueprint {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.10;
+    }
+
+    @media (max-width: 768px) {
+      .video-section__blueprint {
+        opacity: 0.06;
+      }
+    }
+
+    .video-section__header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+      max-width: 800px;
+    }
+
+    .video-section__label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #72c09e;
+      background: rgba(114, 192, 158, 0.1);
+      border: 1px solid rgba(114, 192, 158, 0.25);
+      padding: 6px 16px;
+      border-radius: 100px;
+    }
+
+    .video-section__label::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #72c09e;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    .video-section__title {
+      font-family: 'Kanit', sans-serif;
+      font-size: 44px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.4px;
+      color: #f2f2f2;
+    }
+
+    .video-section__subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: rgba(242, 242, 242, 0.55);
+    }
+
+    .video-section__player-wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 960px;
+    }
+
+    .video-section__player-wrapper::before {
+      content: '20s';
+      position: absolute;
+      top: -14px;
+      right: 32px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #0c0c0b;
+      background: #72c09e;
+      padding: 4px 14px;
+      border-radius: 100px;
+      z-index: 3;
+    }
+
+    .video-section__player {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #1a1a1a;
+      border: 1px solid rgba(114, 192, 158, 0.15);
+      box-shadow:
+        0 0 0 1px rgba(114, 192, 158, 0.05),
+        0 24px 80px -12px rgba(0, 0, 0, 0.5),
+        0 0 120px rgba(114, 192, 158, 0.06);
+    }
+
+    .video-section__player video,
+    .video-section__player iframe {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-section__play-btn {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(12, 12, 11, 0.4);
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .video-section__play-btn:hover {
+      background: rgba(12, 12, 11, 0.2);
+    }
+
+    .video-section__play-circle {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: rgba(114, 192, 158, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 0 0 0 rgba(114, 192, 158, 0.3);
+      animation: play-pulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes play-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(114, 192, 158, 0.3); }
+      50% { box-shadow: 0 0 0 20px rgba(114, 192, 158, 0); }
+    }
+
+    .video-section__play-btn:hover .video-section__play-circle {
+      transform: scale(1.1);
+      animation: none;
+      box-shadow: 0 0 0 12px rgba(114, 192, 158, 0.15);
+    }
+
+    .video-section__play-circle svg {
+      margin-left: 4px;
+    }
+
+    .video-section__steps {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 0;
+      width: 100%;
+      max-width: 960px;
+      justify-content: center;
+    }
+
+    .video-section__step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 24px 16px;
+      text-align: center;
+      position: relative;
+    }
+
+    .video-section__step::after {
+      content: '';
+      position: absolute;
+      top: 28px;
+      right: 0;
+      width: 1px;
+      height: 24px;
+      background: rgba(242, 242, 242, 0.08);
+    }
+
+    .video-section__step:last-child::after {
+      display: none;
+    }
+
+    .video-section__step-num {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(114, 192, 158, 0.1);
+      border: 1px solid rgba(114, 192, 158, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #72c09e;
+    }
+
+    .video-section__step-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: rgba(242, 242, 242, 0.5);
+    }
+
+    /* Installation featured card */
+    .video-section__featured {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 960px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: rgba(242, 242, 242, 0.03);
+      border: 1px solid rgba(114, 192, 158, 0.1);
+    }
+
+    .video-section__featured-img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-section__featured-body {
+      display: flex;
+      align-items: flex-start;
+      
+      gap: 32px;
+      padding: 36px 40px;
+    }
+
+    .video-section__featured-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .video-section__featured-tag {
+      display: inline-block;
+      width: fit-content;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #0c0c0b;
+      background: #72c09e;
+      padding: 4px 12px;
+      border-radius: 4px;
+    }
+
+    .video-section__featured-title {
+      font-family: 'Kanit', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #f2f2f2;
+    }
+
+    .video-section__featured-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.7;
+      color: rgba(242, 242, 242, 0.5);
+    }
+
+    .video-section__featured-stats {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-left: 32px;
+      border-left: 1px solid rgba(242, 242, 242, 0.08);
+    }
+
+    .video-section__featured-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .video-section__featured-stat-value {
+      font-family: 'Kanit', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1;
+      color: #72c09e;
+    }
+
+    .video-section__featured-stat-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(242, 242, 242, 0.35);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    @media (max-width: 1024px) {
+      .video-section__featured-body {
+        flex-direction: column;
+        gap: 24px;
+        padding: 28px 32px;
+      }
+
+      .video-section__featured-stats {
+        flex-direction: row;
+        gap: 32px;
+        padding-left: 0;
+        border-left: none;
+        padding-top: 20px;
+        border-top: 1px solid rgba(242, 242, 242, 0.08);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .video-section__featured-img {
+        height: 200px;
+      }
+
+      .video-section__featured-body {
+        padding: 24px;
+      }
+
+      .video-section__featured-title {
+        font-size: 22px;
+      }
+
+      .video-section__featured-stats {
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .video-section {
+        padding: 80px 32px;
+      }
+
+      .video-section__title {
+        font-size: 36px;
+      }
+
+      .video-section__steps {
+        flex-wrap: wrap;
+      }
+
+      .video-section__step {
+        flex: 1 1 calc(50% - 8px);
+        min-width: 200px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .video-section {
+        padding: 64px 24px;
+        gap: 40px;
+      }
+
+      .video-section__title {
+        font-size: 28px;
+      }
+
+      .video-section__subtitle {
+        font-size: 16px;
+      }
+
+      .video-section__player {
+        border-radius: 12px;
+      }
+
+      .video-section__play-circle {
+        width: 60px;
+        height: 60px;
+      }
+
+      .video-section__steps {
+        flex-direction: column;
+      }
+
+      .video-section__step {
+        flex: 1 1 100%;
+      }
+    }
+
+    /* Sustainability Section */
+    .sustainability {
+      position: relative;
+      background: #f2f2f2;
+      padding: 120px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 72px;
+      overflow: hidden;
+    }
+
+    .sustainability__leaf {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%;
+      background: rgba(114, 192, 158, 0.04);
+      pointer-events: none;
+    }
+
+    .sustainability__leaf--1 {
+      top: -120px;
+      right: -120px;
+      transform: rotate(25deg);
+    }
+
+    .sustainability__leaf--2 {
+      bottom: -80px;
+      left: -100px;
+      transform: rotate(-15deg);
+      width: 300px;
+      height: 300px;
+    }
+
+    .sustainability__header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+      max-width: 780px;
+    }
+
+    .sustainability__label {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #72c09e;
+      background: rgba(114, 192, 158, 0.1);
+      border: 1px solid rgba(114, 192, 158, 0.25);
+      padding: 6px 16px;
+      border-radius: 100px;
+    }
+
+    .sustainability__title {
+      font-family: 'Kanit', sans-serif;
+      font-size: 44px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.4px;
+      color: #0c0c0b;
+    }
+
+    .sustainability__subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    /* Impact stats banner */
+    .sustainability__impact {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      width: 100%;
+      max-width: 1100px;
+      background: #0c0c0b;
+      border-radius: 16px;
+      padding: 40px 32px;
+      overflow: hidden;
+    }
+
+    .sustainability__impact::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(114, 192, 158, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .sustainability__impact-stat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      padding: 0 24px;
+    }
+
+    .sustainability__impact-stat + .sustainability__impact-stat {
+      border-left: 1px solid rgba(242, 242, 242, 0.08);
+    }
+
+    .sustainability__impact-value {
+      font-family: 'Kanit', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1;
+      color: #72c09e;
+    }
+
+    .sustainability__impact-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(242, 242, 242, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
+
+    /* Pillar cards */
+    .sustainability__pillars {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    .sustainability__pillar {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 12px;
+      padding: 32px;
+      min-height: 500px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #0a1c18;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .sustainability__pillar:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(114, 192, 158, 0.08);
+    }
+
+    .sustainability__pillar::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(6, 15, 11, 0.98) 0%, rgba(6, 15, 11, 0.6) 50%, transparent 100%);
+      z-index: 1;
+    }
+
+    /* Card 1: Circular - rotating ring of arrows */
+    .sustainability__pillar--circular .sustainability__pillar-deco {
+      position: absolute;
+      top: 48px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 180px;
+      height: 180px;
+      z-index: 0;
+    }
+
+    .sustainability__pillar-deco__ring {
+      position: absolute;
+      inset: 0;
+      border: 2px dashed rgba(114, 192, 158, 0.15);
+      border-radius: 50%;
+      animation: spin-slow 30s linear infinite;
+    }
+
+    .sustainability__pillar-deco__ring--inner {
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      right: 25px;
+      bottom: 25px;
+      border: 1px solid rgba(114, 192, 158, 0.1);
+      border-radius: 50%;
+      animation: spin-slow 20s linear infinite reverse;
+    }
+
+    .sustainability__pillar-deco__arrow {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-right: 2px solid #72c09e;
+      border-top: 2px solid #72c09e;
+    }
+
+    .sustainability__pillar-deco__arrow--1 { top: 0; left: 50%; transform: translateX(-50%) rotate(-45deg); }
+    .sustainability__pillar-deco__arrow--2 { right: 0; top: 50%; transform: translateY(-50%) rotate(45deg); }
+    .sustainability__pillar-deco__arrow--3 { bottom: 0; left: 50%; transform: translateX(-50%) rotate(135deg); }
+    .sustainability__pillar-deco__arrow--4 { left: 0; top: 50%; transform: translateY(-50%) rotate(-135deg); }
+
+    .sustainability__pillar-deco__center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(114, 192, 158, 0.08);
+      border: 1px solid rgba(114, 192, 158, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Kanit', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #72c09e;
+    }
+
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Card 2: ESG - data grid pattern */
+    .sustainability__pillar--esg .sustainability__pillar-deco {
+      position: absolute;
+      top: 44px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 180px;
+      z-index: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 16px;
+    }
+
+    .sustainability__pillar-deco__bar-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .sustainability__pillar-deco__bar {
+      flex: 1;
+      border-radius: 3px 3px 0 0;
+      background: linear-gradient(to top, rgba(114, 192, 158, 0.06), rgba(114, 192, 158, 0.2));
+      transition: background 0.3s ease;
+    }
+
+    .sustainability__pillar--esg:hover .sustainability__pillar-deco__bar {
+      background: linear-gradient(to top, rgba(114, 192, 158, 0.1), rgba(114, 192, 158, 0.3));
+    }
+
+    .sustainability__pillar-deco__bar--1 { height: 40%; }
+    .sustainability__pillar-deco__bar--2 { height: 65%; }
+    .sustainability__pillar-deco__bar--3 { height: 55%; }
+    .sustainability__pillar-deco__bar--4 { height: 80%; }
+    .sustainability__pillar-deco__bar--5 { height: 70%; }
+    .sustainability__pillar-deco__bar--6 { height: 90%; background: linear-gradient(to top, rgba(114, 192, 158, 0.15), rgba(114, 192, 158, 0.35)); }
+    .sustainability__pillar-deco__bar--7 { height: 75%; }
+
+    .sustainability__pillar-deco__baseline {
+      width: 100%;
+      height: 1px;
+      background: rgba(114, 192, 158, 0.12);
+    }
+
+    .sustainability__pillar-deco__labels {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      color: rgba(114, 192, 158, 0.3);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* Card 3: Impact - shield with layers */
+    .sustainability__pillar--impact .sustainability__pillar-deco {
+      position: absolute;
+      top: 48px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 160px;
+      height: 180px;
+      z-index: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sustainability__pillar-deco__shield {
+      position: relative;
+      width: 120px;
+      height: 140px;
+    }
+
+    .sustainability__pillar-deco__shield-layer {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      border: 1px solid rgba(114, 192, 158, 0.12);
+      border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
+    }
+
+    .sustainability__pillar-deco__shield-layer--1 {
+      width: 120px;
+      height: 140px;
+      border-color: rgba(114, 192, 158, 0.08);
+    }
+
+    .sustainability__pillar-deco__shield-layer--2 {
+      width: 90px;
+      height: 108px;
+      top: 16px;
+      border-color: rgba(114, 192, 158, 0.14);
+      background: rgba(114, 192, 158, 0.02);
+    }
+
+    .sustainability__pillar-deco__shield-layer--3 {
+      width: 56px;
+      height: 72px;
+      top: 34px;
+      border-color: rgba(114, 192, 158, 0.2);
+      background: rgba(114, 192, 158, 0.04);
+    }
+
+    .sustainability__pillar-deco__shield-check {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .sustainability__pillar-icon {
+      position: relative;
+      z-index: 2;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(114, 192, 158, 0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(114, 192, 158, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sustainability__pillar-title {
+      position: relative;
+      z-index: 2;
+      font-family: 'Inter', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1.3;
+      color: #f2f2f2;
+    }
+
+    .sustainability__pillar-desc {
+      position: relative;
+      z-index: 2;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: rgba(242, 242, 242, 0.65);
+    }
+
+    /* Material badge on cards */
+    .sustainability__pillar-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 3;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #f2f2f2;
+      background: rgba(114, 192, 158, 0.25);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(114, 192, 158, 0.2);
+      padding: 5px 12px;
+      border-radius: 6px;
+    }
+
+    /* Process flow */
+    .sustainability__process {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    .sustainability__process-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      text-align: center;
+      position: relative;
+      padding: 0 20px;
+    }
+
+    .sustainability__process-step::after {
+      content: '';
+      position: absolute;
+      top: 24px;
+      right: 0;
+      width: calc(100% - 68px);
+      height: 1px;
+      background: linear-gradient(to right, rgba(114, 192, 158, 0.3), rgba(114, 192, 158, 0.1));
+      transform: translateX(50%);
+    }
+
+    .sustainability__process-step:last-child::after {
+      display: none;
+    }
+
+    .sustainability__process-num {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid #72c09e;
+      background: #f2f2f2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #72c09e;
+      position: relative;
+      z-index: 1;
+    }
+
+    .sustainability__process-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: #0c0c0b;
+    }
+
+    .sustainability__process-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #777;
+    }
+
+    @media (max-width: 1024px) {
+      .sustainability {
+        padding: 80px 32px;
+      }
+
+      .sustainability__title {
+        font-size: 36px;
+      }
+
+      .sustainability__impact {
+        flex-wrap: wrap;
+        gap: 16px;
+        padding: 32px 24px;
+      }
+
+      .sustainability__impact-stat {
+        flex: 1 1 45%;
+        padding: 12px 0;
+        border-left: none !important;
+      }
+
+      .sustainability__impact-value {
+        font-size: 40px;
+      }
+
+      .sustainability__pillars {
+        grid-template-columns: 1fr;
+        max-width: 560px;
+      }
+
+      .sustainability__process {
+        flex-wrap: wrap;
+        gap: 24px;
+        justify-content: center;
+      }
+
+      .sustainability__process-step {
+        flex: 1 1 45%;
+        min-width: 160px;
+      }
+
+      .sustainability__process-step::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sustainability {
+        padding: 64px 24px;
+        gap: 48px;
+      }
+
+      .sustainability__title {
+        font-size: 28px;
+      }
+
+      .sustainability__subtitle {
+        font-size: 16px;
+      }
+
+      .sustainability__pillar {
+        padding: 24px;
+        min-height: 420px;
+      }
+
+      .sustainability__impact {
+        flex-wrap: wrap;
+        gap: 24px;
+        padding: 32px 24px;
+      }
+
+      .sustainability__impact-stat {
+        flex: 1 1 40%;
+        padding: 12px 0;
+      }
+
+      .sustainability__impact-stat + .sustainability__impact-stat {
+        border-left: none;
+      }
+
+      .sustainability__impact-value {
+        font-size: 36px;
+      }
+
+      .sustainability__process {
+        flex-wrap: wrap;
+        gap: 32px;
+        justify-content: center;
+      }
+
+      .sustainability__process-step::after {
+        display: none;
+      }
+
+      .sustainability__process-step {
+        flex: 1 1 40%;
+        min-width: 140px;
+      }
+    }
+
+    /* Use Cases Section */
+    .usecases {
+      position: relative;
+      background: #0c0c0b;
+      padding: 120px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 72px;
+      overflow: hidden;
+    }
+
+    .usecases__blueprint {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.10;
+    }
+
+    @media (max-width: 768px) {
+      .usecases__blueprint {
+        opacity: 0.06;
+      }
+    }
+
+    .usecases__deco-line {
+      position: absolute;
+      width: 1px;
+      height: 100%;
+      top: 0;
+      background: linear-gradient(to bottom, transparent, rgba(114,192,158,0.06) 30%, rgba(114,192,158,0.06) 70%, transparent);
+      pointer-events: none;
+    }
+
+    .usecases__deco-line--1 { left: 20%; }
+    .usecases__deco-line--2 { left: 50%; }
+    .usecases__deco-line--3 { left: 80%; }
+
+    .usecases__header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+      max-width: 760px;
+    }
+
+    .usecases__label {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #72c09e;
+      background: rgba(114, 192, 158, 0.1);
+      border: 1px solid rgba(114, 192, 158, 0.25);
+      padding: 6px 16px;
+      border-radius: 100px;
+    }
+
+    .usecases__title {
+      font-family: 'Kanit', sans-serif;
+      font-size: 44px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.4px;
+      color: #f2f2f2;
+    }
+
+    .usecases__subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: rgba(242, 242, 242, 0.5);
+    }
+
+    .usecases__grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+      gap: 24px;
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    .usecases__card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 40px 32px 36px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(242, 242, 242, 0.06);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .usecases__card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(114, 192, 158, 0.25);
+    }
+
+    .usecases__card--builders {
+      grid-row: 1 / 3;
+      background: linear-gradient(160deg, #0f2922 0%, #0a1c18 100%);
+      min-height: 420px;
+    }
+
+    .usecases__card--venues {
+      background: linear-gradient(160deg, #141e1b 0%, #0d1210 100%);
+    }
+
+    .usecases__card--agencies {
+      background: linear-gradient(160deg, #1a1a14 0%, #0d0d0b 100%);
+    }
+
+    .usecases__card-number {
+      position: absolute;
+      top: -20px;
+      right: 20px;
+      font-family: 'Kanit', sans-serif;
+      font-size: 160px;
+      font-weight: 700;
+      line-height: 1;
+      color: rgba(114, 192, 158, 0.04);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .usecases__card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      background: rgba(114, 192, 158, 0.1);
+      border: 1px solid rgba(114, 192, 158, 0.12);
+    }
+
+    .usecases__card-for {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #72c09e;
+      margin-bottom: 8px;
+    }
+
+    .usecases__card-audience {
+      font-family: 'Kanit', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #f2f2f2;
+      margin-bottom: 8px;
+    }
+
+    .usecases__card-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: rgba(242, 242, 242, 0.4);
+      margin-bottom: 20px;
+    }
+
+    .usecases__card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      list-style: none;
+      margin-bottom: 24px;
+    }
+
+    .usecases__card-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: rgba(242, 242, 242, 0.6);
+    }
+
+    .usecases__card-list li::before {
+      content: '';
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      border-radius: 50%;
+      background: rgba(114, 192, 158, 0.12);
+      background-image: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2372c09e' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 10px;
+    }
+
+    .usecases__card-metric {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid rgba(242, 242, 242, 0.06);
+    }
+
+    .usecases__card-metric-value {
+      font-family: 'Kanit', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1;
+      color: #72c09e;
+    }
+
+    .usecases__card-metric-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: rgba(242, 242, 242, 0.4);
+    }
+
+    .usecases__card-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, #72c09e 50%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .usecases__card:hover .usecases__card-line {
+      opacity: 1;
+    }
+
+    /* Quote row */
+    .usecases__quote {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      width: 100%;
+      max-width: 1100px;
+      background: linear-gradient(135deg, rgba(114, 192, 158, 0.06) 0%, rgba(114, 192, 158, 0.02) 100%);
+      border: 1px solid rgba(114, 192, 158, 0.1);
+      border-radius: 16px;
+      padding: 40px 48px;
+    }
+
+    .usecases__quote-mark {
+      flex-shrink: 0;
+      font-family: 'Kanit', sans-serif;
+      font-size: 72px;
+      font-weight: 700;
+      line-height: 1;
+      color: rgba(114, 192, 158, 0.2);
+    }
+
+    .usecases__quote-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .usecases__quote-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.7;
+      color: rgba(242, 242, 242, 0.7);
+    }
+
+    .usecases__quote-author {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(242, 242, 242, 0.45);
+    }
+
+    .usecases__quote-author strong {
+      color: #f2f2f2;
+      font-weight: 600;
+    }
+
+    @media (max-width: 1024px) {
+      .usecases {
+        padding: 80px 32px;
+      }
+
+      .usecases__title {
+        font-size: 36px;
+      }
+
+      .usecases__grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+      }
+
+      .usecases__card--builders {
+        grid-row: auto;
+        min-height: auto;
+      }
+
+      .usecases__card-number {
+        font-size: 120px;
+      }
+
+      .usecases__quote {
+        flex-direction: column;
+        gap: 16px;
+        padding: 32px;
+        text-align: center;
+      }
+
+      .usecases__quote-mark {
+        font-size: 48px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .usecases {
+        padding: 64px 24px;
+        gap: 48px;
+      }
+
+      .usecases__title {
+        font-size: 28px;
+      }
+
+      .usecases__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .usecases__card {
+        padding: 32px 24px 28px;
+      }
+
+      .usecases__card-audience {
+        font-size: 24px;
+      }
+
+      .usecases__card-number {
+        font-size: 100px;
+        top: -10px;
+        right: 12px;
+      }
+
+      .usecases__quote {
+        padding: 24px;
+      }
+
+      .usecases__quote-text {
+        font-size: 16px;
+      }
+
+      .usecases__deco-line {
+        display: none;
+      }
+    }
+
+    /* FAQ Section */
+    .faq {
+      position: relative;
+      background: #f2f2f2;
+      padding: 120px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 64px;
+      overflow: hidden;
+    }
+
+    .faq__deco-circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(114, 192, 158, 0.08);
+      pointer-events: none;
+    }
+
+    .faq__deco-circle--1 {
+      width: 500px;
+      height: 500px;
+      top: -180px;
+      left: -180px;
+    }
+
+    .faq__deco-circle--2 {
+      width: 350px;
+      height: 350px;
+      bottom: -100px;
+      right: -120px;
+    }
+
+    .faq__wrapper {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 80px;
+      width: 100%;
+      max-width: 1100px;
+      align-items: start;
+    }
+
+    .faq__sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      position: sticky;
+      top: 100px;
+    }
+
+    .faq__header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .faq__label {
+      display: inline-block;
+      width: fit-content;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #72c09e;
+      background: rgba(114, 192, 158, 0.1);
+      border: 1px solid rgba(114, 192, 158, 0.25);
+      padding: 6px 16px;
+      border-radius: 100px;
+    }
+
+    .faq__title {
+      font-family: 'Kanit', sans-serif;
+      font-size: 44px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.4px;
+      color: #0c0c0b;
+    }
+
+    .faq__subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    /* Quick facts card */
+    .faq__facts {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid rgba(12, 12, 11, 0.06);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .faq__facts-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #999;
+    }
+
+    .faq__fact {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .faq__fact-icon {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(114, 192, 158, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .faq__fact-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+      line-height: 1.4;
+    }
+
+    .faq__fact-text strong {
+      color: #0c0c0b;
+      font-weight: 700;
+    }
+
+    /* Contact CTA in sidebar */
+    .faq__contact {
+      background: #0c0c0b;
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq__contact-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: rgba(242, 242, 242, 0.6);
+    }
+
+    .faq__contact-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: #72c09e;
+      color: #0c0c0b;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .faq__contact-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    /* Category tags */
+    .faq__categories {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .faq__cat-btn {
+      padding: 8px 18px;
+      border-radius: 100px;
+      border: 1px solid rgba(12, 12, 11, 0.12);
+      background: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .faq__cat-btn:hover {
+      border-color: rgba(114, 192, 158, 0.4);
+      color: #0c0c0b;
+    }
+
+    .faq__cat-btn.active {
+      background: #0c0c0b;
+      color: #f2f2f2;
+      border-color: #0c0c0b;
+    }
+
+    /* FAQ list */
+    .faq__list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .faq__item {
+      border-bottom: 1px solid rgba(12, 12, 11, 0.1);
+      transition: opacity 0.3s ease;
+    }
+
+    .faq__item:first-child {
+      border-top: 1px solid rgba(12, 12, 11, 0.1);
+    }
+
+    .faq__item.hidden {
+      display: none;
+    }
+
+    .faq__question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      width: 100%;
+      padding: 24px 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: #0c0c0b;
+      transition: color 0.2s ease;
+    }
+
+    .faq__question:hover {
+      color: #72c09e;
+    }
+
+    .faq__question-tag {
+      flex-shrink: 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #72c09e;
+      background: rgba(114, 192, 158, 0.1);
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-right: 4px;
+    }
+
+    .faq__icon {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(12, 12, 11, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .faq__item.active .faq__icon {
+      transform: rotate(45deg);
+      background: rgba(114, 192, 158, 0.15);
+    }
+
+    .faq__answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+    }
+
+    .faq__item.active .faq__answer {
+      max-height: 300px;
+    }
+
+    .faq__answer p {
+      padding: 0 0 24px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.7;
+      color: #555;
+    }
+
+    .faq__answer a {
+      color: #72c09e;
+      text-decoration: none;
+    }
+
+    .faq__answer a:hover {
+      text-decoration: underline;
+    }
+
+    .faq__answer-highlight {
+      display: inline-block;
+      background: rgba(114, 192, 158, 0.1);
+      color: #0c0c0b;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 1024px) {
+      .faq {
+        padding: 80px 32px;
+      }
+
+      .faq__wrapper {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .faq__sidebar {
+        position: static;
+        text-align: center;
+        align-items: center;
+      }
+
+      .faq__header {
+        align-items: center;
+        text-align: center;
+      }
+
+      .faq__title {
+        font-size: 36px;
+      }
+
+      .faq__facts {
+        max-width: 400px;
+        width: 100%;
+      }
+
+      .faq__contact {
+        max-width: 400px;
+        width: 100%;
+        align-items: center;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .faq {
+        padding: 64px 24px;
+        gap: 40px;
+      }
+
+      .faq__title {
+        font-size: 28px;
+      }
+
+      .faq__question {
+        font-size: 15px;
+        padding: 20px 0;
+      }
+
+      .faq__question-tag {
+        display: none;
+      }
+
+      .faq__categories {
+        gap: 6px;
+      }
+
+      .faq__cat-btn {
+        font-size: 12px;
+        padding: 6px 14px;
+      }
+
+      .faq__deco-circle {
+        display: none;
+      }
+    }
+
+    /* Final CTA Section */
+    .final-cta {
+      position: relative;
+      background: linear-gradient(160deg, #060f0b 0%, #0b3f37 100%);
+      padding: 120px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 64px;
+      overflow: hidden;
+    }
+
+    .final-cta__grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(114, 192, 158, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(114, 192, 158, 0.04) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+      -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+      mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+    }
+
+    .final-cta__glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(114, 192, 158, 0.12) 0%, transparent 60%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .final-cta__header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+      max-width: 680px;
+    }
+
+    .final-cta__title {
+      font-family: 'Kanit', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.4px;
+      color: #f2f2f2;
+    }
+
+    .final-cta__subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: rgba(242, 242, 242, 0.55);
+    }
+
+    /* Action buttons row */
+    .final-cta__actions {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .final-cta__action-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .final-cta__action-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .final-cta__action-btn--primary {
+      background: #72c09e;
+      color: #0c0c0b;
+      box-shadow: 0 4px 24px rgba(114, 192, 158, 0.25);
+    }
+
+    .final-cta__action-btn--primary:hover {
+      box-shadow: 0 8px 32px rgba(114, 192, 158, 0.35);
+    }
+
+    .final-cta__action-btn--secondary {
+      background: rgba(242, 242, 242, 0.06);
+      color: #f2f2f2;
+      border: 1px solid rgba(242, 242, 242, 0.12);
+    }
+
+    .final-cta__action-btn--secondary:hover {
+      background: rgba(242, 242, 242, 0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Panel container */
+    .final-cta__panel {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 580px;
+    }
+
+    .final-cta__panel-box {
+      display: none;
+      flex-direction: column;
+      background: rgba(242, 242, 242, 0.03);
+      border: 1px solid rgba(242, 242, 242, 0.08);
+      border-radius: 20px;
+      padding: 40px;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      animation: panel-in 0.35s ease;
+    }
+
+    .final-cta__panel-box.active {
+      display: flex;
+    }
+
+    @keyframes panel-in {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .final-cta__panel-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .final-cta__panel-heading {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .final-cta__panel-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(114, 192, 158, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .final-cta__panel-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #f2f2f2;
+    }
+
+    .final-cta__panel-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(242, 242, 242, 0.06);
+      border: none;
+      color: rgba(242, 242, 242, 0.5);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .final-cta__panel-close:hover {
+      background: rgba(242, 242, 242, 0.12);
+    }
+
+    .final-cta__form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .final-cta__form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .final-cta__input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(242, 242, 242, 0.05);
+      border: 1px solid rgba(242, 242, 242, 0.1);
+      border-radius: 10px;
+      color: #f2f2f2;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .final-cta__input::placeholder {
+      color: rgba(242, 242, 242, 0.3);
+    }
+
+    .final-cta__input:focus {
+      border-color: #72c09e;
+    }
+
+    .final-cta__textarea {
+      resize: none;
+      min-height: 90px;
+    }
+
+    .final-cta__form-submit {
+      margin-top: 4px;
+      padding: 14px;
+      background: #72c09e;
+      color: #0c0c0b;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .final-cta__form-submit:hover {
+      background: #5fac8a;
+      transform: translateY(-1px);
+    }
+
+    .final-cta__thankyou {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 16px;
+      padding: 40px 20px;
+    }
+
+    .final-cta__thankyou.visible {
+      display: flex;
+    }
+
+    .final-cta__thankyou-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(114, 192, 158, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .final-cta__thankyou-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.7;
+      color: rgba(242, 242, 242, 0.6);
+      max-width: 360px;
+    }
+
+    /* Footer row under panel */
+    .final-cta__footer {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: rgba(242, 242, 242, 0.3);
+    }
+
+    .final-cta__footer a {
+      color: #72c09e;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .final-cta__footer a:hover {
+      color: #5fac8a;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 1024px) {
+      .final-cta {
+        padding: 80px 32px;
+      }
+
+      .final-cta__title {
+        font-size: 38px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .final-cta {
+        padding: 64px 24px;
+        gap: 48px;
+      }
+
+      .final-cta__title {
+        font-size: 30px;
+      }
+
+      .final-cta__subtitle {
+        font-size: 16px;
+      }
+
+      .final-cta__actions {
+        flex-direction: column;
+        width: 100%;
+        max-width: 340px;
+      }
+
+      .final-cta__action-btn {
+        justify-content: center;
+        width: 100%;
+      }
+
+      .final-cta__panel-box {
+        padding: 28px;
+      }
+
+      .final-cta__form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .final-cta__footer {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    /* Footer */
+    .site-footer {
+      position: relative;
+      background: #060f0b;
+      padding: 0 64px;
+      overflow: hidden;
+    }
+
+    .site-footer__top-line {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(114, 192, 158, 0.2), transparent);
+    }
+
+    .site-footer__main {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding: 72px 0 56px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .site-footer__brand {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .site-footer__logo {
+      font-family: 'Kanit', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .site-footer__logo-retile {
+      color: #f2f2f2;
+    }
+
+    .site-footer__logo-floor {
+      color: #72c09e;
+    }
+
+    .site-footer__tagline {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.7;
+      color: rgba(242, 242, 242, 0.4);
+      max-width: 280px;
+    }
+
+    .site-footer__socials {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .site-footer__social {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(242, 242, 242, 0.05);
+      border: 1px solid rgba(242, 242, 242, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(242, 242, 242, 0.5);
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+
+    .site-footer__social:hover {
+      background: rgba(114, 192, 158, 0.1);
+      border-color: rgba(114, 192, 158, 0.25);
+      color: #72c09e;
+    }
+
+    .site-footer__col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .site-footer__col-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: rgba(242, 242, 242, 0.25);
+      margin-bottom: 4px;
+    }
+
+    .site-footer__link {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(242, 242, 242, 0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+      width: fit-content;
+    }
+
+    .site-footer__link:hover {
+      color: #72c09e;
+    }
+
+    .site-footer__link-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #0c0c0b;
+      background: #72c09e;
+      padding: 2px 6px;
+      border-radius: 3px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* Newsletter */
+    .site-footer__newsletter {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .site-footer__newsletter-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: rgba(242, 242, 242, 0.4);
+      line-height: 1.5;
+    }
+
+    .site-footer__newsletter-form {
+      display: flex;
+      gap: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(242, 242, 242, 0.1);
+      background: rgba(242, 242, 242, 0.04);
+      transition: border-color 0.2s;
+    }
+
+    .site-footer__newsletter-form:focus-within {
+      border-color: rgba(114, 192, 158, 0.3);
+    }
+
+    .site-footer__newsletter-input {
+      flex: 1;
+      padding: 12px 14px;
+      background: transparent;
+      border: none;
+      color: #f2f2f2;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      outline: none;
+      min-width: 0;
+    }
+
+    .site-footer__newsletter-input::placeholder {
+      color: rgba(242, 242, 242, 0.25);
+    }
+
+    .site-footer__newsletter-btn {
+      padding: 12px 18px;
+      background: #72c09e;
+      border: none;
+      color: #0c0c0b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .site-footer__newsletter-btn:hover {
+      background: #5fac8a;
+    }
+
+    /* Bottom bar */
+    .site-footer__bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0;
+      border-top: 1px solid rgba(242, 242, 242, 0.06);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .site-footer__copy {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: rgba(242, 242, 242, 0.25);
+    }
+
+    .site-footer__legal {
+      display: flex;
+      gap: 24px;
+    }
+
+    .site-footer__legal a {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: rgba(242, 242, 242, 0.25);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .site-footer__legal a:hover {
+      color: rgba(242, 242, 242, 0.6);
+    }
+
+    /* Decorative corner tiles */
+    .site-footer__deco-tile {
+      position: absolute;
+      border: 1px solid rgba(114, 192, 158, 0.06);
+      pointer-events: none;
+    }
+
+    .site-footer__deco-tile--1 {
+      width: 120px;
+      height: 120px;
+      bottom: 40px;
+      right: 30px;
+      transform: rotate(15deg);
+    }
+
+    .site-footer__deco-tile--2 {
+      width: 60px;
+      height: 60px;
+      top: 60px;
+      right: 80px;
+      transform: rotate(-10deg);
+      border-color: rgba(114, 192, 158, 0.04);
+    }
+
+    @media (max-width: 1024px) {
+      .site-footer {
+        padding: 0 32px;
+      }
+
+      .site-footer__main {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+      }
+
+      .site-footer__brand {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .site-footer {
+        padding: 0 24px;
+      }
+
+      .site-footer__main {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        padding: 48px 0 40px;
+      }
+
+      .site-footer__brand {
+        grid-column: auto;
+      }
+
+      .site-footer__bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+
+      .site-footer__legal {
+        gap: 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .site-footer__deco-tile {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" id="mainNav">
+    <a href="#hero" class="nav__logo">
+      <img src="img/logo.png" alt="RetileFloor" class="nav__logo-img">
+    </a>
+    <ul class="nav__links">
+      <li><a href="#hero" class="nav__link nav__link--active" data-section="hero">Home</a></li>
+      <li><a href="#benefits" class="nav__link" data-section="benefits">Benefits</a></li>
+      <li><a href="#installation" class="nav__link" data-section="installation">Installation</a></li>
+      <li><a href="#sustainability" class="nav__link" data-section="sustainability">Sustainability</a></li>
+      <li><a href="#usecases" class="nav__link" data-section="usecases">Use Cases</a></li>
+      <li><a href="#faq" class="nav__link" data-section="faq">FAQ</a></li>
+    </ul>
+    <a href="#contact" class="nav__cta">Contact Us <span class="nav__cta-arrow">&rarr;</span></a>
+    <button class="nav__hamburger" id="navHamburger" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav__progress"><div class="nav__progress-bar" id="navProgressBar"></div></div>
+  </nav>
+
+  <div class="nav__mobile-overlay" id="navMobileOverlay">
+    <a href="#hero" class="nav__mobile-link" data-section="hero">Home</a>
+    <a href="#benefits" class="nav__mobile-link" data-section="benefits">Benefits</a>
+    <a href="#installation" class="nav__mobile-link" data-section="installation">Installation</a>
+    <a href="#sustainability" class="nav__mobile-link" data-section="sustainability">Sustainability</a>
+    <a href="#usecases" class="nav__mobile-link" data-section="usecases">Use Cases</a>
+    <a href="#faq" class="nav__mobile-link" data-section="faq">FAQ</a>
+    <a href="#contact" class="nav__mobile-cta">Contact Us &rarr;</a>
+  </div>
+
+  <section class="hero" id="hero">
+    <div class="hero__bg-grid"></div>
+    <div class="hero__glow hero__glow--top"></div>
+    <div class="hero__glow hero__glow--bottom"></div>
+    <div class="hero__bg-tile hero__bg-tile--1"></div>
+    <div class="hero__bg-tile hero__bg-tile--2"></div>
+    <div class="hero__bg-tile hero__bg-tile--3"></div>
+    <div class="hero__bg-tile hero__bg-tile--4"></div>
+    <div class="hero__bg-angle hero__bg-angle--1"></div>
+    <div class="hero__bg-angle hero__bg-angle--2"></div>
+    <div class="hero__bg-cross hero__bg-cross--1"></div>
+    <div class="hero__bg-cross hero__bg-cross--2"></div>
+    <div class="hero__bg-cross hero__bg-cross--3"></div>
+
+    <div class="hero__container">
+      <div class="hero__column">
+        <div class="hero__badges">
+          <span class="hero__badge"><span class="hero__badge-icon">&#9889;</span> 4x Faster Install</span>
+          <span class="hero__badge"><span class="hero__badge-icon">&#9851;</span> 100% Recyclable</span>
+          <span class="hero__badge"><span class="hero__badge-icon">&#9878;</span> Heavy-Duty</span>
+        </div>
+        <div class="hero__content">
+          <h1 class="hero__headline">
+            Install up to 4x faster. Store and transport up to 50% less. Built to reduce waste and impact
+          </h1>
+          <p class="hero__subheadline">
+            Sustainable modular flooring for stands and exhibitions. Quick click assembly, clean cable management, heavy-duty, and built to be reused.
+          </p>
+        </div>
+        <div class="hero__actions">
+          <a href="#" class="hero__btn hero__btn--primary">Download specs</a>
+          <a href="#" class="hero__btn hero__btn--secondary">Get sample</a>
+        </div>
+        <div class="hero__divider">
+          <span class="hero__divider-text">Trusted worldwide</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__logos">
+      <img src="logos/aevea-dark.svg" alt="Aevea" class="hero__logo">
+      <img src="logos/afe-dark.svg" alt="AFE" class="hero__logo">
+      <img src="logos/amkt-dark.svg" alt="AMKT" class="hero__logo">
+      <img src="logos/esc.svg" alt="ESC" class="hero__logo">
+      <img src="logos/icca-dark.svg" alt="ICCA" class="hero__logo">
+      <img src="logos/ifes-dark.svg" alt="IFES" class="hero__logo">
+      <img src="logos/interihotel.svg" alt="Interihotel" class="hero__logo">
+      <img src="logos/nissan.svg" alt="Nissan" class="hero__logo">
+      <img src="logos/ufi-dark.svg" alt="UFI" class="hero__logo">
+      <img src="logos/volvo.svg" alt="Volvo" class="hero__logo">
+    </div>
+
+    <div class="hero__gallery">
+      <div class="hero__gallery-row">
+        <div class="hero__gallery-track hero__gallery-track--left">
+          <div class="hero__gallery-item"><img src="img/4ET_0623.jpg" alt="Retile floor installation"></div>
+          <div class="hero__gallery-item"><img src="img/4ET_0624.jpg" alt="Retile floor detail"></div>
+          <div class="hero__gallery-item"><img src="img/4ET_0625.jpg" alt="Retile floor assembly"></div>
+          <div class="hero__gallery-item"><img src="img/4ET_0626.jpg" alt="Retile floor exhibition"></div>
+          <div class="hero__gallery-item"><img src="img/4ET_0627.jpg" alt="Retile floor stand"></div>
+          <div class="hero__gallery-item"><img src="img/retilefloor2.jpg" alt="Retile modular flooring"></div>
+          <!-- Duplicados para loop infinito -->
+          <div class="hero__gallery-item"><img src="img/4ET_0623.jpg" alt="Retile floor installation"></div>
+          <div class="hero__gallery-item"><img src="img/4ET_0624.jpg" alt="Retile floor detail"></div>
+          <div class="hero__gallery-item"><img src="img/4ET_0625.jpg" alt="Retile floor assembly"></div>
+          <div class="hero__gallery-item"><img src="img/4ET_0626.jpg" alt="Retile floor exhibition"></div>
+          <div class="hero__gallery-item"><img src="img/4ET_0627.jpg" alt="Retile floor stand"></div>
+          <div class="hero__gallery-item"><img src="img/retilefloor2.jpg" alt="Retile modular flooring"></div>
+        </div>
+      </div>
+      <div class="hero__gallery-row">
+        <div class="hero__gallery-track hero__gallery-track--right">
+          <div class="hero__gallery-item"><img src="img/retilefloor 3.jpg" alt="Retile floor showcase"></div>
+          <div class="hero__gallery-item"><img src="img/retilefloor 4.jpg" alt="Retile floor event"></div>
+          <div class="hero__gallery-item"><img src="img/retilefloor 5.jpg" alt="Retile floor design"></div>
+          <div class="hero__gallery-item"><img src="img/retilefloor 6.jpg" alt="Retile floor modular"></div>
+          <div class="hero__gallery-item"><img src="img/retilefloor 7.jpg" alt="Retile floor sustainable"></div>
+          <div class="hero__gallery-item"><img src="img/retilefloor 8.jpg" alt="Retile floor reusable"></div>
+          <!-- Duplicados para loop infinito -->
+          <div class="hero__gallery-item"><img src="img/retilefloor 3.jpg" alt="Retile floor showcase"></div>
+          <div class="hero__gallery-item"><img src="img/retilefloor 4.jpg" alt="Retile floor event"></div>
+          <div class="hero__gallery-item"><img src="img/retilefloor 5.jpg" alt="Retile floor design"></div>
+          <div class="hero__gallery-item"><img src="img/retilefloor 6.jpg" alt="Retile floor modular"></div>
+          <div class="hero__gallery-item"><img src="img/retilefloor 7.jpg" alt="Retile floor sustainable"></div>
+          <div class="hero__gallery-item"><img src="img/retilefloor 8.jpg" alt="Retile floor reusable"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__features-card">
+    <div class="hero__features">
+      <div class="hero__feature">
+        <div class="hero__feature-top">
+          <div class="hero__feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <span class="hero__feature-metric">4&times;</span>
+        </div>
+        <div class="hero__feature-text">
+          <span class="hero__feature-title">Fast setup</span>
+          <span class="hero__feature-desc">Modular click system + dual-function connector (joint + cable cover)</span>
+        </div>
+      </div>
+      <div class="hero__feature">
+        <div class="hero__feature-top">
+          <div class="hero__feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          </div>
+          <span class="hero__feature-metric">0 cables</span>
+        </div>
+        <div class="hero__feature-text">
+          <span class="hero__feature-title">Clean finish</span>
+          <span class="hero__feature-desc">Bottom register for concealed wiring&mdash;no visible trays or trip hazards</span>
+        </div>
+      </div>
+      <div class="hero__feature">
+        <div class="hero__feature-top">
+          <div class="hero__feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
+          </div>
+          <span class="hero__feature-metric">500 kg</span>
+        </div>
+        <div class="hero__feature-text">
+          <span class="hero__feature-title">Built for reuse</span>
+          <span class="hero__feature-desc">500 kg load capacity per tile, durable and reusable across 50+ cycles</span>
+        </div>
+      </div>
+    </div>
+    </div>
+
+  </section>
+
+  <!-- Hero to Benefits Divider -->
+  <div class="hero-divider">
+    <svg class="hero-divider__wave" viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="waveFill" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#060f0b"/>
+          <stop offset="50%" stop-color="#0b3f37"/>
+          <stop offset="100%" stop-color="#060f0b"/>
+        </linearGradient>
+      </defs>
+      <polygon points="0,0 0,80 200,80 280,40 520,40 600,100 840,100 920,20 1100,20 1180,70 1440,70 1440,0" fill="url(#waveFill)"/>
+      <polygon points="0,0 0,55 150,55 230,90 400,90 480,30 680,30 760,75 960,75 1040,45 1250,45 1330,85 1440,85 1440,0" fill="url(#waveFill)" opacity="0.35"/>
+    </svg>
+    <div class="hero-divider__content">
+      <div class="hero-divider__badge">
+        <span class="hero-divider__pulse"></span>
+        <span class="hero-divider__text">Discover the advantages</span>
+        <svg class="hero-divider__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Benefits Section -->
+  <section class="benefits" id="benefits">
+    <div class="benefits__deco-grid"></div>
+
+    <div class="benefits__header">
+      <span class="benefits__label">Benefits</span>
+      <h2 class="benefits__title">Why teams choose RetileFloor <br>for their installations?</h2>
+      <p class="benefits__subtitle">A modular flooring system that saves time, cuts costs, and delivers measurable sustainability impact&mdash;event after event.</p>
+    </div>
+
+    <div class="benefits__featured">
+      <div class="benefits__featured-content">
+        <span class="benefits__featured-tag">Key advantage</span>
+        <h3 class="benefits__featured-title">Install up to 4&times; faster than traditional flooring</h3>
+        <p class="benefits__featured-desc">The click-lock modular system eliminates adhesives, drying time, and specialized tools. Two people can cover an entire exhibition stand in a fraction of the time.</p>
+        <div class="benefits__featured-stats">
+          <div class="benefits__featured-stat">
+            <span class="benefits__featured-stat-value">100 m&sup2;/h</span>
+            <span class="benefits__featured-stat-label">Install speed</span>
+          </div>
+          <div class="benefits__featured-stat">
+            <span class="benefits__featured-stat-value">2</span>
+            <span class="benefits__featured-stat-label">People needed</span>
+          </div>
+          <div class="benefits__featured-stat">
+            <span class="benefits__featured-stat-value">0</span>
+            <span class="benefits__featured-stat-label">Tools required</span>
+          </div>
+        </div>
+      </div>
+      <div class="benefits__featured-visual">
+        <img src="img/4ET_0623.jpg" alt="RetileFloor fast installation">
+      </div>
+    </div>
+
+    <div class="benefits__grid">
+      <div class="benefits__card">
+        <div class="benefits__card-top">
+          <div class="benefits__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </div>
+          <span class="benefits__card-metric">&minus;50%</span>
+        </div>
+        <h3 class="benefits__card-title">Reduce storage &amp; transport</h3>
+        <p class="benefits__card-desc">Optimized stacking geometry cuts storage volume in half. Fewer trucks, smaller warehouses, lower logistics costs per event.</p>
+      </div>
+
+      <div class="benefits__card">
+        <div class="benefits__card-top">
+          <div class="benefits__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+          <span class="benefits__card-metric">500 kg</span>
+        </div>
+        <h3 class="benefits__card-title">Heavy-duty &amp; reusable</h3>
+        <p class="benefits__card-desc">Each tile supports up to 500 kg of static load. Built from reinforced recycled PP for 50+ reuse cycles without degradation.</p>
+      </div>
+
+      <div class="benefits__card">
+        <div class="benefits__card-top">
+          <div class="benefits__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M7 12l2-2 4 4-2 2-4-4z"/><path d="M15 8l2 2-8 8-2-2 8-8z"/></svg>
+          </div>
+          <span class="benefits__card-metric">&minus;83%</span>
+        </div>
+        <h3 class="benefits__card-title">Measurable sustainability</h3>
+        <p class="benefits__card-desc">Up to 83% carbon footprint reduction vs. wooden alternatives. Made from 85% recycled PP carpet waste, 100% recyclable at end of life.</p>
+      </div>
+
+      <div class="benefits__card">
+        <div class="benefits__card-top">
+          <div class="benefits__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83M16.62 12l-5.74 9.94"/></svg>
+          </div>
+          <span class="benefits__card-metric">Hidden</span>
+        </div>
+        <h3 class="benefits__card-title">Clean cable management</h3>
+        <p class="benefits__card-desc">Integrated bottom register conceals power, data, and AV cabling beneath the floor. No visible cable trays, no trip hazards.</p>
+      </div>
+
+      <div class="benefits__card">
+        <div class="benefits__card-top">
+          <div class="benefits__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="5" rx="1"/><rect x="4" y="9" width="16" height="5" rx="1"/><rect x="6" y="14" width="12" height="5" rx="1"/></svg>
+          </div>
+          <span class="benefits__card-metric">Custom</span>
+        </div>
+        <h3 class="benefits__card-title">Carpet-ready surface</h3>
+        <p class="benefits__card-desc">Accepts standard event carpet overlays for brand-matched finishes. Switch colors or add logos between events without replacing tiles.</p>
+      </div>
+    </div>
+
+    <div class="benefits__compare">
+      <span class="benefits__compare-title">RetileFloor vs. traditional flooring</span>
+      <div class="benefits__compare-rows">
+        <div class="benefits__compare-row">
+          <span class="benefits__compare-label">Install time</span>
+          <div class="benefits__compare-bar benefits__compare-bar--old" style="width:100%">8&ndash;12 hours</div>
+          <div class="benefits__compare-bar benefits__compare-bar--new" style="width:40%">2&ndash;3 hours</div>
+        </div>
+        <div class="benefits__compare-row">
+          <span class="benefits__compare-label">Crew size</span>
+          <div class="benefits__compare-bar benefits__compare-bar--old" style="width:80%">6&ndash;8 people</div>
+          <div class="benefits__compare-bar benefits__compare-bar--new" style="width:25%">2 people</div>
+        </div>
+        <div class="benefits__compare-row">
+          <span class="benefits__compare-label">Waste generated</span>
+          <div class="benefits__compare-bar benefits__compare-bar--old" style="width:90%">100% to landfill</div>
+          <div class="benefits__compare-bar benefits__compare-bar--new" style="width:10%">Zero</div>
+        </div>
+        <div class="benefits__compare-row">
+          <span class="benefits__compare-label">Reuse cycles</span>
+          <div class="benefits__compare-bar benefits__compare-bar--old" style="width:15%">1 use</div>
+          <div class="benefits__compare-bar benefits__compare-bar--new" style="width:100%">50+ cycles</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="benefits__cta">
+      <p class="benefits__cta-text">Any questions? Would you like us to call you?</p>
+      <div class="benefits__cta-buttons">
+        <a href="#" class="benefits__btn benefits__btn--primary">Download Technical Specs (PDF)</a>
+        <a href="#" class="benefits__btn benefits__btn--secondary">Get a Free Sample</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Video Section -->
+  <section class="video-section" id="installation">
+    <svg class="video-section__blueprint" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="tileUnit" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+          <rect x="2" y="2" width="55" height="55" rx="2" fill="none" stroke="#72c09e" stroke-width="0.8"/>
+          <rect x="63" y="2" width="55" height="55" rx="2" fill="none" stroke="#72c09e" stroke-width="0.8"/>
+          <rect x="2" y="63" width="55" height="55" rx="2" fill="none" stroke="#72c09e" stroke-width="0.8"/>
+          <rect x="63" y="63" width="55" height="55" rx="2" fill="none" stroke="#72c09e" stroke-width="0.8"/>
+          <circle cx="60" cy="60" r="3" fill="#72c09e" opacity="0.5"/>
+          <circle cx="60" cy="2" r="2" fill="#72c09e" opacity="0.3"/>
+          <circle cx="60" cy="118" r="2" fill="#72c09e" opacity="0.3"/>
+          <circle cx="2" cy="60" r="2" fill="#72c09e" opacity="0.3"/>
+          <circle cx="118" cy="60" r="2" fill="#72c09e" opacity="0.3"/>
+          <line x1="57" y1="22" x2="57" y2="38" stroke="#72c09e" stroke-width="0.6" opacity="0.3"/>
+          <line x1="63" y1="22" x2="63" y2="38" stroke="#72c09e" stroke-width="0.6" opacity="0.3"/>
+          <line x1="57" y1="82" x2="57" y2="98" stroke="#72c09e" stroke-width="0.6" opacity="0.3"/>
+          <line x1="63" y1="82" x2="63" y2="98" stroke="#72c09e" stroke-width="0.6" opacity="0.3"/>
+          <line x1="22" y1="57" x2="38" y2="57" stroke="#72c09e" stroke-width="0.6" opacity="0.3"/>
+          <line x1="22" y1="63" x2="38" y2="63" stroke="#72c09e" stroke-width="0.6" opacity="0.3"/>
+          <line x1="82" y1="57" x2="98" y2="57" stroke="#72c09e" stroke-width="0.6" opacity="0.3"/>
+          <line x1="82" y1="63" x2="98" y2="63" stroke="#72c09e" stroke-width="0.6" opacity="0.3"/>
+          <circle cx="20" cy="20" r="1" fill="#72c09e" opacity="0.2"/>
+          <circle cx="40" cy="35" r="0.8" fill="#72c09e" opacity="0.15"/>
+          <circle cx="80" cy="25" r="1" fill="#72c09e" opacity="0.2"/>
+          <circle cx="100" cy="40" r="0.8" fill="#72c09e" opacity="0.15"/>
+          <circle cx="25" cy="85" r="1" fill="#72c09e" opacity="0.2"/>
+          <circle cx="45" cy="100" r="0.8" fill="#72c09e" opacity="0.15"/>
+          <circle cx="85" cy="80" r="1" fill="#72c09e" opacity="0.2"/>
+          <circle cx="105" cy="95" r="0.8" fill="#72c09e" opacity="0.15"/>
+          <circle cx="30" cy="30" r="0.6" fill="#72c09e" opacity="0.12"/>
+          <circle cx="90" cy="90" r="0.6" fill="#72c09e" opacity="0.12"/>
+          <circle cx="30" cy="90" r="0.6" fill="#72c09e" opacity="0.12"/>
+          <circle cx="90" cy="30" r="0.6" fill="#72c09e" opacity="0.12"/>
+        </pattern>
+        <radialGradient id="blueprintFade" cx="50%" cy="50%" r="70%">
+          <stop offset="0%" stop-color="white" stop-opacity="1"/>
+          <stop offset="50%" stop-color="white" stop-opacity="0.7"/>
+          <stop offset="85%" stop-color="white" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="white" stop-opacity="0"/>
+        </radialGradient>
+        <mask id="blueprintMask">
+          <rect width="100%" height="100%" fill="url(#blueprintFade)"/>
+        </mask>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#tileUnit)" mask="url(#blueprintMask)"/>
+    </svg>
+
+    <div class="video-section__header">
+      <span class="video-section__label">Installation</span>
+      <h2 class="video-section__title">Quick assembly, clean wiring, and a finished look&mdash;without the hassle.</h2>
+      <p class="video-section__subtitle">See the installation in 20 seconds</p>
+    </div>
+
+    <div class="video-section__player-wrapper">
+      <div class="video-section__player">
+        <div class="video-section__play-btn" id="videoPlayBtn">
+          <div class="video-section__play-circle">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="#fff"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="video-section__steps">
+      <div class="video-section__step">
+        <span class="video-section__step-num">1</span>
+        <span class="video-section__step-text">Click assembly (no tools shown)</span>
+      </div>
+      <div class="video-section__step">
+        <span class="video-section__step-num">2</span>
+        <span class="video-section__step-text">Dual connector: joint + cable cover</span>
+      </div>
+      <div class="video-section__step">
+        <span class="video-section__step-num">3</span>
+        <span class="video-section__step-text">Bottom register for concealed wiring</span>
+      </div>
+      <div class="video-section__step">
+        <span class="video-section__step-num">4</span>
+        <span class="video-section__step-text">Stacking / transport volume shot</span>
+      </div>
+      <div class="video-section__step">
+        <span class="video-section__step-num">5</span>
+        <span class="video-section__step-text">End screen: &ldquo;Get a Free Sample&rdquo;</span>
+      </div>
+    </div>
+
+    <div class="video-section__featured">
+      <img class="video-section__featured-img" src="img/4ET_0625.jpg" alt="RetileFloor modular installation in action">
+      <div class="video-section__featured-body">
+        <div class="video-section__featured-info">
+          <span class="video-section__featured-tag">How it works</span>
+          <h3 class="video-section__featured-title">Click, connect, done &mdash; no tools, no adhesives, no waste</h3>
+          <p class="video-section__featured-desc">The patented dual-function connector acts as both a structural joint and a cable cover. Each tile clicks into place in seconds, creating a seamless, load-bearing surface ready for any event.</p>
+        </div>
+        <div class="video-section__featured-stats">
+          <div class="video-section__featured-stat">
+            <span class="video-section__featured-stat-value">100 m&sup2;/h</span>
+            <span class="video-section__featured-stat-label">Install speed</span>
+          </div>
+          <div class="video-section__featured-stat">
+            <span class="video-section__featured-stat-value">20s</span>
+            <span class="video-section__featured-stat-label">Per tile</span>
+          </div>
+          <div class="video-section__featured-stat">
+            <span class="video-section__featured-stat-value">0</span>
+            <span class="video-section__featured-stat-label">Tools needed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Installation to Sustainability Divider -->
+  <div class="hero-divider hero-divider--dark">
+    <svg class="hero-divider__wave" viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="waveFill2" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#d8d8d8"/>
+          <stop offset="50%" stop-color="#f2f2f2"/>
+          <stop offset="100%" stop-color="#d8d8d8"/>
+        </linearGradient>
+      </defs>
+      <polygon points="0,120 0,40 180,40 260,80 480,80 560,20 800,20 880,95 1080,95 1160,45 1440,45 1440,120" fill="url(#waveFill2)"/>
+      <polygon points="0,120 0,65 140,65 220,30 380,30 460,90 660,90 740,45 940,45 1020,75 1220,75 1300,35 1440,35 1440,120" fill="url(#waveFill2)" opacity="0.35"/>
+    </svg>
+    <div class="hero-divider__content">
+      <div class="hero-divider__badge">
+        <span class="hero-divider__pulse"></span>
+        <span class="hero-divider__text">Committed to the planet</span>
+        <svg class="hero-divider__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sustainability Section -->
+  <section class="sustainability" id="sustainability">
+    <div class="sustainability__leaf sustainability__leaf--1"></div>
+    <div class="sustainability__leaf sustainability__leaf--2"></div>
+
+    <div class="sustainability__header">
+      <span class="sustainability__label">Sustainability</span>
+      <h2 class="sustainability__title">Sustainability you can measure</h2>
+      <p class="sustainability__subtitle">RetileFloor is built to reduce waste and impact&mdash;without compromising performance.</p>
+    </div>
+
+    <div class="sustainability__impact">
+      <div class="sustainability__impact-stat">
+        <span class="sustainability__impact-value">85%</span>
+        <span class="sustainability__impact-label">Recycled content</span>
+      </div>
+      <div class="sustainability__impact-stat">
+        <span class="sustainability__impact-value">100%</span>
+        <span class="sustainability__impact-label">Recyclable after use</span>
+      </div>
+      <div class="sustainability__impact-stat">
+        <span class="sustainability__impact-value">50+</span>
+        <span class="sustainability__impact-label">Reuse cycles</span>
+      </div>
+      <div class="sustainability__impact-stat">
+        <span class="sustainability__impact-value">0</span>
+        <span class="sustainability__impact-label">Waste to landfill</span>
+      </div>
+    </div>
+
+    <div class="sustainability__pillars">
+      <div class="sustainability__pillar sustainability__pillar--circular">
+        <div class="sustainability__pillar-deco">
+          <div class="sustainability__pillar-deco__ring"></div>
+          <div class="sustainability__pillar-deco__ring--inner"></div>
+          <div class="sustainability__pillar-deco__arrow sustainability__pillar-deco__arrow--1"></div>
+          <div class="sustainability__pillar-deco__arrow sustainability__pillar-deco__arrow--2"></div>
+          <div class="sustainability__pillar-deco__arrow sustainability__pillar-deco__arrow--3"></div>
+          <div class="sustainability__pillar-deco__arrow sustainability__pillar-deco__arrow--4"></div>
+          <div class="sustainability__pillar-deco__center">&infin;</div>
+        </div>
+        <span class="sustainability__pillar-badge">Circular</span>
+        <div class="sustainability__pillar-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
+        </div>
+        <h3 class="sustainability__pillar-title">Circular by design</h3>
+        <p class="sustainability__pillar-desc">Made from post-event carpet waste, 100% recyclable after use. Every tile re-enters the production cycle, closing the loop.</p>
+      </div>
+
+      <div class="sustainability__pillar sustainability__pillar--esg">
+        <div class="sustainability__pillar-deco">
+          <div class="sustainability__pillar-deco__bar-row">
+            <div class="sustainability__pillar-deco__bar sustainability__pillar-deco__bar--1"></div>
+            <div class="sustainability__pillar-deco__bar sustainability__pillar-deco__bar--2"></div>
+            <div class="sustainability__pillar-deco__bar sustainability__pillar-deco__bar--3"></div>
+            <div class="sustainability__pillar-deco__bar sustainability__pillar-deco__bar--4"></div>
+            <div class="sustainability__pillar-deco__bar sustainability__pillar-deco__bar--5"></div>
+            <div class="sustainability__pillar-deco__bar sustainability__pillar-deco__bar--6"></div>
+            <div class="sustainability__pillar-deco__bar sustainability__pillar-deco__bar--7"></div>
+          </div>
+          <div class="sustainability__pillar-deco__baseline"></div>
+          <div class="sustainability__pillar-deco__labels">
+            <span>2020</span>
+            <span>2023</span>
+            <span>2026</span>
+          </div>
+        </div>
+        <span class="sustainability__pillar-badge">Compliance</span>
+        <div class="sustainability__pillar-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <h3 class="sustainability__pillar-title">ESG-ready</h3>
+        <p class="sustainability__pillar-desc">Supports sustainability reporting requirements for venues, organizers, and stand builders. Certified data for your ESG reports.</p>
+      </div>
+
+      <div class="sustainability__pillar sustainability__pillar--impact">
+        <div class="sustainability__pillar-deco">
+          <div class="sustainability__pillar-deco__shield">
+            <div class="sustainability__pillar-deco__shield-layer sustainability__pillar-deco__shield-layer--1"></div>
+            <div class="sustainability__pillar-deco__shield-layer sustainability__pillar-deco__shield-layer--2"></div>
+            <div class="sustainability__pillar-deco__shield-layer sustainability__pillar-deco__shield-layer--3"></div>
+            <svg class="sustainability__pillar-deco__shield-check" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
+        <span class="sustainability__pillar-badge">Impact</span>
+        <div class="sustainability__pillar-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <h3 class="sustainability__pillar-title">Less waste per m&sup2;, per show</h3>
+        <p class="sustainability__pillar-desc">Reusable across multiple cycles reduces single-use material consumption at scale. Measurable impact per event.</p>
+      </div>
+    </div>
+
+    <div class="sustainability__process">
+      <div class="sustainability__process-step">
+        <div class="sustainability__process-num">1</div>
+        <span class="sustainability__process-title">Collect</span>
+        <span class="sustainability__process-desc">Post-event carpet waste is collected from exhibitions</span>
+      </div>
+      <div class="sustainability__process-step">
+        <div class="sustainability__process-num">2</div>
+        <span class="sustainability__process-title">Recycle</span>
+        <span class="sustainability__process-desc">Material is processed and transformed into raw fiber</span>
+      </div>
+      <div class="sustainability__process-step">
+        <div class="sustainability__process-num">3</div>
+        <span class="sustainability__process-title">Manufacture</span>
+        <span class="sustainability__process-desc">New RetileFloor tiles are produced from recycled content</span>
+      </div>
+      <div class="sustainability__process-step">
+        <div class="sustainability__process-num">4</div>
+        <span class="sustainability__process-title">Use &amp; Reuse</span>
+        <span class="sustainability__process-desc">Tiles are installed, used and collected again to restart</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases Section -->
+  <section class="usecases" id="usecases">
+    <svg class="usecases__blueprint" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="ucTileUnit" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+          <rect x="2" y="2" width="55" height="55" rx="2" fill="none" stroke="#72c09e" stroke-width="0.8"/>
+          <rect x="63" y="2" width="55" height="55" rx="2" fill="none" stroke="#72c09e" stroke-width="0.8"/>
+          <rect x="2" y="63" width="55" height="55" rx="2" fill="none" stroke="#72c09e" stroke-width="0.8"/>
+          <rect x="63" y="63" width="55" height="55" rx="2" fill="none" stroke="#72c09e" stroke-width="0.8"/>
+          <circle cx="60" cy="60" r="3" fill="#72c09e" opacity="0.5"/>
+          <circle cx="60" cy="2" r="2" fill="#72c09e" opacity="0.3"/>
+          <circle cx="60" cy="118" r="2" fill="#72c09e" opacity="0.3"/>
+          <circle cx="2" cy="60" r="2" fill="#72c09e" opacity="0.3"/>
+          <circle cx="118" cy="60" r="2" fill="#72c09e" opacity="0.3"/>
+          <line x1="57" y1="22" x2="57" y2="38" stroke="#72c09e" stroke-width="0.6" opacity="0.3"/>
+          <line x1="63" y1="22" x2="63" y2="38" stroke="#72c09e" stroke-width="0.6" opacity="0.3"/>
+          <line x1="57" y1="82" x2="57" y2="98" stroke="#72c09e" stroke-width="0.6" opacity="0.3"/>
+          <line x1="63" y1="82" x2="63" y2="98" stroke="#72c09e" stroke-width="0.6" opacity="0.3"/>
+          <line x1="22" y1="57" x2="38" y2="57" stroke="#72c09e" stroke-width="0.6" opacity="0.3"/>
+          <line x1="22" y1="63" x2="38" y2="63" stroke="#72c09e" stroke-width="0.6" opacity="0.3"/>
+          <line x1="82" y1="57" x2="98" y2="57" stroke="#72c09e" stroke-width="0.6" opacity="0.3"/>
+          <line x1="82" y1="63" x2="98" y2="63" stroke="#72c09e" stroke-width="0.6" opacity="0.3"/>
+          <circle cx="20" cy="20" r="1" fill="#72c09e" opacity="0.2"/>
+          <circle cx="40" cy="35" r="0.8" fill="#72c09e" opacity="0.15"/>
+          <circle cx="80" cy="25" r="1" fill="#72c09e" opacity="0.2"/>
+          <circle cx="100" cy="40" r="0.8" fill="#72c09e" opacity="0.15"/>
+          <circle cx="25" cy="85" r="1" fill="#72c09e" opacity="0.2"/>
+          <circle cx="45" cy="100" r="0.8" fill="#72c09e" opacity="0.15"/>
+          <circle cx="85" cy="80" r="1" fill="#72c09e" opacity="0.2"/>
+          <circle cx="105" cy="95" r="0.8" fill="#72c09e" opacity="0.15"/>
+          <circle cx="30" cy="30" r="0.6" fill="#72c09e" opacity="0.12"/>
+          <circle cx="90" cy="90" r="0.6" fill="#72c09e" opacity="0.12"/>
+          <circle cx="30" cy="90" r="0.6" fill="#72c09e" opacity="0.12"/>
+          <circle cx="90" cy="30" r="0.6" fill="#72c09e" opacity="0.12"/>
+        </pattern>
+        <radialGradient id="ucBlueprintFade" cx="50%" cy="50%" r="70%">
+          <stop offset="0%" stop-color="white" stop-opacity="1"/>
+          <stop offset="50%" stop-color="white" stop-opacity="0.7"/>
+          <stop offset="85%" stop-color="white" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="white" stop-opacity="0"/>
+        </radialGradient>
+        <mask id="ucBlueprintMask">
+          <rect width="100%" height="100%" fill="url(#ucBlueprintFade)"/>
+        </mask>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#ucTileUnit)" mask="url(#ucBlueprintMask)"/>
+    </svg>
+    <div class="usecases__deco-line usecases__deco-line--1"></div>
+    <div class="usecases__deco-line usecases__deco-line--2"></div>
+    <div class="usecases__deco-line usecases__deco-line--3"></div>
+
+    <div class="usecases__header">
+      <span class="usecases__label">Use Cases</span>
+      <h2 class="usecases__title">Built for the way events really run</h2>
+      <p class="usecases__subtitle">Different roles, different needs&mdash;same reliable floor. See how RetileFloor adapts to every stakeholder in the event chain.</p>
+    </div>
+
+    <div class="usecases__grid">
+      <div class="usecases__card usecases__card--builders">
+        <span class="usecases__card-number">01</span>
+        <div class="usecases__card-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01"/><path d="M17 12h.01"/><path d="M7 12h.01"/></svg>
+        </div>
+        <span class="usecases__card-for">For</span>
+        <h3 class="usecases__card-audience">Stand builders</h3>
+        <p class="usecases__card-desc">Reduce crew size, installation time, and operational complexity&mdash;while delivering a premium floor finish every time.</p>
+        <ul class="usecases__card-list">
+          <li>Up to 4&times; faster installation vs. traditional flooring</li>
+          <li>Fewer crew hours &mdash; 2 people can cover 100m&sup2;/h</li>
+          <li>Integrated cable management beneath tiles</li>
+          <li>No adhesives, no drying time, no waste on site</li>
+          <li>Reusable across multiple events</li>
+        </ul>
+        <div class="usecases__card-metric">
+          <span class="usecases__card-metric-value">4&times;</span>
+          <span class="usecases__card-metric-label">faster than traditional install</span>
+        </div>
+        <div class="usecases__card-line"></div>
+      </div>
+
+      <div class="usecases__card usecases__card--venues">
+        <span class="usecases__card-number">02</span>
+        <div class="usecases__card-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <span class="usecases__card-for">For</span>
+        <h3 class="usecases__card-audience">Venues &amp; organizers</h3>
+        <p class="usecases__card-desc">Lower waste, streamline logistics, and strengthen your sustainability credentials with verifiable impact data.</p>
+        <ul class="usecases__card-list">
+          <li>Zero waste to landfill from flooring</li>
+          <li>ESG-ready reporting documentation</li>
+          <li>Simplified logistics &amp; faster turnovers</li>
+        </ul>
+        <div class="usecases__card-metric">
+          <span class="usecases__card-metric-value">0</span>
+          <span class="usecases__card-metric-label">waste to landfill per event</span>
+        </div>
+        <div class="usecases__card-line"></div>
+      </div>
+
+      <div class="usecases__card usecases__card--agencies">
+        <span class="usecases__card-number">03</span>
+        <div class="usecases__card-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <span class="usecases__card-for">For</span>
+        <h3 class="usecases__card-audience">Agencies &amp; designers</h3>
+        <p class="usecases__card-desc">Maintain visual consistency across every show while offering sustainable finishes that elevate your client&rsquo;s brand.</p>
+        <ul class="usecases__card-list">
+          <li>Premium look &amp; feel, event after event</li>
+          <li>Carpet-ready surface for custom branding</li>
+          <li>Scalable across multiple simultaneous shows</li>
+        </ul>
+        <div class="usecases__card-metric">
+          <span class="usecases__card-metric-value">50+</span>
+          <span class="usecases__card-metric-label">reuse cycles per tile set</span>
+        </div>
+        <div class="usecases__card-line"></div>
+      </div>
+    </div>
+
+    <div class="usecases__quote">
+      <span class="usecases__quote-mark">&ldquo;</span>
+      <div class="usecases__quote-body">
+        <p class="usecases__quote-text">RetileFloor changed how we approach event flooring. What used to take a full day now takes hours&mdash;and we leave zero waste behind. It&rsquo;s a game-changer for our operation and our ESG commitments.</p>
+        <span class="usecases__quote-author"><strong>Operations Director</strong> &mdash; Leading European Exhibition Venue</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases to FAQ Divider -->
+  <div class="hero-divider hero-divider--dark">
+    <svg class="hero-divider__wave" viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="waveFill3" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#d8d8d8"/>
+          <stop offset="50%" stop-color="#f2f2f2"/>
+          <stop offset="100%" stop-color="#d8d8d8"/>
+        </linearGradient>
+      </defs>
+      <polygon points="0,120 0,45 220,45 300,85 500,85 580,15 820,15 900,90 1120,90 1200,50 1440,50 1440,120" fill="url(#waveFill3)"/>
+      <polygon points="0,120 0,70 160,70 240,35 420,35 500,88 700,88 780,42 980,42 1060,72 1260,72 1340,30 1440,30 1440,120" fill="url(#waveFill3)" opacity="0.35"/>
+    </svg>
+    <div class="hero-divider__content">
+      <div class="hero-divider__badge">
+        <span class="hero-divider__pulse"></span>
+        <span class="hero-divider__text">Got questions?</span>
+        <svg class="hero-divider__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ Section -->
+  <section class="faq" id="faq">
+    <div class="faq__deco-circle faq__deco-circle--1"></div>
+    <div class="faq__deco-circle faq__deco-circle--2"></div>
+
+    <div class="faq__categories">
+      <button class="faq__cat-btn active" data-cat="all">All questions</button>
+      <button class="faq__cat-btn" data-cat="install">Installation</button>
+      <button class="faq__cat-btn" data-cat="product">Product</button>
+      <button class="faq__cat-btn" data-cat="sustainability">Sustainability</button>
+      <button class="faq__cat-btn" data-cat="pricing">Pricing &amp; Custom</button>
+    </div>
+
+    <div class="faq__wrapper">
+      <div class="faq__sidebar">
+        <div class="faq__header">
+          <span class="faq__label">FAQ</span>
+          <h2 class="faq__title">Frequently asked questions</h2>
+          <p class="faq__subtitle">Everything you need to know about RetileFloor. Can&rsquo;t find what you&rsquo;re looking for?</p>
+        </div>
+
+        <div class="faq__facts">
+          <span class="faq__facts-title">Quick facts</span>
+          <div class="faq__fact">
+            <div class="faq__fact-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <span class="faq__fact-text"><strong>100 m&sup2;/h</strong> install speed (2 people)</span>
+          </div>
+          <div class="faq__fact">
+            <div class="faq__fact-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            </div>
+            <span class="faq__fact-text"><strong>500 kg</strong> load capacity per tile</span>
+          </div>
+          <div class="faq__fact">
+            <div class="faq__fact-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 014-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 01-4 4H3"/></svg>
+            </div>
+            <span class="faq__fact-text"><strong>50+</strong> reuse cycles per set</span>
+          </div>
+          <div class="faq__fact">
+            <div class="faq__fact-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <span class="faq__fact-text"><strong>85%</strong> recycled content</span>
+          </div>
+        </div>
+
+        <div class="faq__contact">
+          <p class="faq__contact-text">Still have questions? Our team is ready to help you find the right solution.</p>
+          <a href="mailto:info@retilefloor.com" class="faq__contact-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Contact us
+          </a>
+        </div>
+      </div>
+
+      <div class="faq__list">
+        <div class="faq__item" data-cat="install">
+          <button class="faq__question">
+            <span><span class="faq__question-tag">Install</span> How fast is installation?</span>
+            <span class="faq__icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </button>
+          <div class="faq__answer"><p>Up to 4x faster depending on surface, crew, and layout.</p></div>
+        </div>
+
+        <div class="faq__item" data-cat="product">
+          <button class="faq__question">
+            <span><span class="faq__question-tag">Product</span> Can it handle heavy loads?</span>
+            <span class="faq__icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </button>
+          <div class="faq__answer"><p>Yes&mdash;up to 500 kg load capacity per tile.</p></div>
+        </div>
+
+        <div class="faq__item" data-cat="install">
+          <button class="faq__question">
+            <span><span class="faq__question-tag">Install</span> How does cable management work?</span>
+            <span class="faq__icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </button>
+          <div class="faq__answer"><p>The bottom register allows concealed wiring for a cleaner finish.</p></div>
+        </div>
+
+        <div class="faq__item" data-cat="product">
+          <button class="faq__question">
+            <span><span class="faq__question-tag">Product</span> Is it compatible with carpet finishes?</span>
+            <span class="faq__icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </button>
+          <div class="faq__answer"><p>Yes&mdash;carpet-ready by design, enabling different look &amp; feel options.</p></div>
+        </div>
+
+        <div class="faq__item" data-cat="sustainability">
+          <button class="faq__question">
+            <span><span class="faq__question-tag">Sustainability</span> Can it be used more than once?</span>
+            <span class="faq__icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </button>
+          <div class="faq__answer"><p>Yes&mdash;Retilefloor is a product that can be reused an infinite number of times.</p></div>
+        </div>
+
+        <div class="faq__item" data-cat="sustainability">
+          <button class="faq__question">
+            <span><span class="faq__question-tag">Sustainability</span> Is this a recycled and recyclable product?</span>
+            <span class="faq__icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </button>
+          <div class="faq__answer"><p>Yes&mdash;Retilefloor is made from recycled PP carpet waste and it could be recycled once the product deteriorates.</p></div>
+        </div>
+
+        <div class="faq__item" data-cat="pricing">
+          <button class="faq__question">
+            <span><span class="faq__question-tag">Custom</span> Can I customize the tile with my logo?</span>
+            <span class="faq__icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </button>
+          <div class="faq__answer"><p>Yes&mdash;You have different options depending on the square meters you contract.</p></div>
+        </div>
+
+        <div class="faq__item" data-cat="pricing">
+          <button class="faq__question">
+            <span><span class="faq__question-tag">Pricing</span> What is the price per square meter?</span>
+            <span class="faq__icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </button>
+          <div class="faq__answer"><p>The price depends on the quantity you request. Please feel free to contact us on <a href="mailto:info@retilefloor.com">info@retilefloor.com</a> for a customized quote.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA Section -->
+  <section class="final-cta" id="contact">
+    <div class="final-cta__grid-bg"></div>
+    <div class="final-cta__glow"></div>
+
+    <div class="final-cta__header">
+      <h3 class="final-cta__title">Ready to see RetileFloor in your next build?</h3>
+      <p class="final-cta__subtitle">Get a free sample or download the technical specs to evaluate the system with your team.</p>
+    </div>
+
+    <div class="final-cta__actions">
+      <button class="final-cta__action-btn final-cta__action-btn--primary" onclick="openPanel('sample')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        Get a Free Sample
+      </button>
+      <button class="final-cta__action-btn final-cta__action-btn--secondary" onclick="openPanel('specs')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Download Technical Specs (PDF)
+      </button>
+      <button class="final-cta__action-btn final-cta__action-btn--secondary" onclick="openPanel('doubt')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Ask a Question
+      </button>
+    </div>
+
+    <div class="final-cta__panel">
+      <!-- Panel 1: Free Sample -->
+      <div class="final-cta__panel-box" id="panelSample">
+        <div class="final-cta__panel-top">
+          <div class="final-cta__panel-heading">
+            <div class="final-cta__panel-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            </div>
+            <span class="final-cta__panel-title">Request a Free Sample</span>
+          </div>
+          <button class="final-cta__panel-close" onclick="closePanel('panelSample')">&times;</button>
+        </div>
+        <form class="final-cta__form" id="formSample" onsubmit="handleForm(event, 'sample')">
+          <div class="final-cta__form-row">
+            <input type="text" class="final-cta__input" placeholder="Name" required>
+            <input type="text" class="final-cta__input" placeholder="Surname" required>
+          </div>
+          <input type="text" class="final-cta__input" placeholder="Company" required>
+          <input type="tel" class="final-cta__input" placeholder="Telephone" required>
+          <button type="submit" class="final-cta__form-submit">Send request</button>
+        </form>
+        <div class="final-cta__thankyou" id="thanksSample">
+          <div class="final-cta__thankyou-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <p class="final-cta__thankyou-text">Thank you for requesting your sample. One of our sales representatives will contact you shortly.</p>
+        </div>
+      </div>
+
+      <!-- Panel 2: Download Technical Specs -->
+      <div class="final-cta__panel-box" id="panelSpecs">
+        <div class="final-cta__panel-top">
+          <div class="final-cta__panel-heading">
+            <div class="final-cta__panel-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <span class="final-cta__panel-title">Download Technical Specs</span>
+          </div>
+          <button class="final-cta__panel-close" onclick="closePanel('panelSpecs')">&times;</button>
+        </div>
+        <form class="final-cta__form" id="formSpecs" onsubmit="handleForm(event, 'specs')">
+          <div class="final-cta__form-row">
+            <input type="text" class="final-cta__input" placeholder="Name" required>
+            <input type="text" class="final-cta__input" placeholder="Surname" required>
+          </div>
+          <input type="text" class="final-cta__input" placeholder="Company" required>
+          <input type="tel" class="final-cta__input" placeholder="Telephone" required>
+          <button type="submit" class="final-cta__form-submit">Download PDF</button>
+        </form>
+        <div class="final-cta__thankyou" id="thanksSpecs">
+          <div class="final-cta__thankyou-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <p class="final-cta__thankyou-text">Thank you for your interest in Retile Floor. The product sheet you requested will download shortly.</p>
+        </div>
+      </div>
+
+      <!-- Panel 3: Ask a Question / Doubt -->
+      <div class="final-cta__panel-box" id="panelDoubt">
+        <div class="final-cta__panel-top">
+          <div class="final-cta__panel-heading">
+            <div class="final-cta__panel-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <span class="final-cta__panel-title">Ask us anything</span>
+          </div>
+          <button class="final-cta__panel-close" onclick="closePanel('panelDoubt')">&times;</button>
+        </div>
+        <form class="final-cta__form" id="formDoubt" onsubmit="handleForm(event, 'doubt')">
+          <div class="final-cta__form-row">
+            <input type="text" class="final-cta__input" placeholder="Name" required>
+            <input type="text" class="final-cta__input" placeholder="Surname" required>
+          </div>
+          <input type="text" class="final-cta__input" placeholder="Company" required>
+          <input type="tel" class="final-cta__input" placeholder="Telephone" required>
+          <textarea class="final-cta__input final-cta__textarea" placeholder="Tell us what is your doubt:" required></textarea>
+          <button type="submit" class="final-cta__form-submit">Send message</button>
+        </form>
+        <div class="final-cta__thankyou" id="thanksDoubt">
+          <div class="final-cta__thankyou-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#72c09e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <p class="final-cta__thankyou-text">Thank you for contacting us. A sales representative from our team will contact you shortly to answer your question.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="final-cta__footer">
+      <span>Or email us directly at</span>
+      <a href="mailto:info@retilefloor.com">info@retilefloor.com</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="site-footer__deco-tile site-footer__deco-tile--1"></div>
+    <div class="site-footer__deco-tile site-footer__deco-tile--2"></div>
+    <div class="site-footer__top-line"></div>
+
+    <div class="site-footer__main">
+      <div class="site-footer__brand">
+        <a href="#" class="site-footer__logo">
+          <span class="site-footer__logo-retile">retile</span><span class="site-footer__logo-floor">floor</span>
+        </a>
+        <p class="site-footer__tagline">The modular, recycled flooring system for exhibitions and events. Built for speed, designed for reuse.</p>
+        <div class="site-footer__socials">
+          <a href="#" class="site-footer__social" aria-label="LinkedIn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+          <a href="#" class="site-footer__social" aria-label="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a href="#" class="site-footer__social" aria-label="YouTube">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="site-footer__col">
+        <span class="site-footer__col-title">Product</span>
+        <a href="#benefits" class="site-footer__link">Benefits</a>
+        <a href="#installation" class="site-footer__link">Installation</a>
+        <a href="#sustainability" class="site-footer__link">Sustainability</a>
+        <a href="#usecases" class="site-footer__link">Use Cases</a>
+        <a href="#" class="site-footer__link">Technical Specs <span class="site-footer__link-badge">PDF</span></a>
+      </div>
+
+      <div class="site-footer__col">
+        <span class="site-footer__col-title">Company</span>
+        <a href="#" class="site-footer__link">About us</a>
+        <a href="#" class="site-footer__link">Partners</a>
+        <a href="#" class="site-footer__link">Certifications</a>
+        <a href="#" class="site-footer__link">Press &amp; Media</a>
+        <a href="#contact" class="site-footer__link">Contact</a>
+      </div>
+
+      <div class="site-footer__col">
+        <span class="site-footer__col-title">Stay updated</span>
+        <div class="site-footer__newsletter">
+          <p class="site-footer__newsletter-text">Get product updates, event industry insights and sustainability news.</p>
+          <div class="site-footer__newsletter-form">
+            <input type="email" class="site-footer__newsletter-input" placeholder="Your email address">
+            <button class="site-footer__newsletter-btn" aria-label="Subscribe">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </div>
+        </div>
+        <a href="mailto:info@retilefloor.com" class="site-footer__link">info@retilefloor.com</a>
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <span class="site-footer__copy">&copy; 2026 RetileFloor. All rights reserved.</span>
+      <div class="site-footer__legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Settings</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.faq__question').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var item = this.closest('.faq__item');
+        var wasActive = item.classList.contains('active');
+        document.querySelectorAll('.faq__item.active').forEach(function(el) {
+          el.classList.remove('active');
+        });
+        if (!wasActive) item.classList.add('active');
+      });
+    });
+
+    document.querySelectorAll('.faq__cat-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.faq__cat-btn').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        var cat = this.getAttribute('data-cat');
+        document.querySelectorAll('.faq__item').forEach(function(item) {
+          if (cat === 'all' || item.getAttribute('data-cat') === cat) {
+            item.classList.remove('hidden');
+          } else {
+            item.classList.add('hidden');
+            item.classList.remove('active');
+          }
+        });
+      });
+    });
+
+    function openPanel(type) {
+      document.querySelectorAll('.final-cta__panel-box').forEach(function(p) { p.classList.remove('active'); });
+      var ids = { sample: 'panelSample', specs: 'panelSpecs', doubt: 'panelDoubt' };
+      var panel = document.getElementById(ids[type]);
+      if (panel) {
+        panel.classList.add('active');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function closePanel(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    function handleForm(e, type) {
+      e.preventDefault();
+      var form = e.target;
+      var thanksIds = { sample: 'thanksSample', specs: 'thanksSpecs', doubt: 'thanksDoubt' };
+      form.style.display = 'none';
+      document.getElementById(thanksIds[type]).classList.add('visible');
+    }
+
+    // --- NAV: scroll state + progress bar ---
+    (function() {
+      var nav = document.getElementById('mainNav');
+      var progressBar = document.getElementById('navProgressBar');
+      var hamburger = document.getElementById('navHamburger');
+      var overlay = document.getElementById('navMobileOverlay');
+
+      window.addEventListener('scroll', function() {
+        var scrollY = window.scrollY || window.pageYOffset;
+
+        if (scrollY > 60) {
+          nav.classList.add('nav--scrolled');
+        } else {
+          nav.classList.remove('nav--scrolled');
+        }
+
+        var docH = document.documentElement.scrollHeight - window.innerHeight;
+        var pct = docH > 0 ? (scrollY / docH) * 100 : 0;
+        progressBar.style.width = Math.min(pct, 100) + '%';
+      }, { passive: true });
+
+      // --- NAV: Intersection Observer for active section ---
+      var sections = document.querySelectorAll('section[id]');
+      var navLinks = document.querySelectorAll('.nav__link[data-section]');
+      var mobileLinks = document.querySelectorAll('.nav__mobile-link[data-section]');
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var id = entry.target.id;
+            navLinks.forEach(function(l) {
+              l.classList.toggle('nav__link--active', l.getAttribute('data-section') === id);
+            });
+            mobileLinks.forEach(function(l) {
+              l.classList.toggle('nav__mobile-link--active', l.getAttribute('data-section') === id);
+            });
+          }
+        });
+      }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+
+      sections.forEach(function(sec) { observer.observe(sec); });
+
+      // --- NAV: hamburger toggle ---
+      hamburger.addEventListener('click', function() {
+        var isOpen = overlay.classList.contains('nav__mobile-overlay--open');
+        if (isOpen) {
+          overlay.classList.remove('nav__mobile-overlay--open');
+          hamburger.classList.remove('nav__hamburger--open');
+          document.body.style.overflow = '';
+        } else {
+          overlay.classList.add('nav__mobile-overlay--open');
+          hamburger.classList.add('nav__hamburger--open');
+          document.body.style.overflow = 'hidden';
+        }
+      });
+
+      overlay.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          overlay.classList.remove('nav__mobile-overlay--open');
+          hamburger.classList.remove('nav__hamburger--open');
+          document.body.style.overflow = '';
+        });
+      });
+
+      // smooth scroll for nav links
+      document.querySelectorAll('.nav__link, .nav__mobile-link, .nav__mobile-cta').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          var href = this.getAttribute('href');
+          if (href && href.charAt(0) === '#') {
+            var target = document.querySelector(href);
+            if (target) {
+              e.preventDefault();
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
